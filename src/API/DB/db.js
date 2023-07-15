@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import { setUser } from "../localStorage";
 import { setNotification } from "@/assets/notifications";
@@ -22,78 +22,12 @@ const db = getFirestore(app);
 
 export default db
 
-//FUNTIONS
-
-export function validatedUserData(userMail, nickname, password){
-
-  const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
-
-  try{
-    //Check if exist all data
-    if(!userMail){
-      throw new Error("I need a valid user mail")
-    }
-    if(!nickname){
-      throw new Error("I need a valid nickname")
-    }
-    if(!password){
-      throw new Error("I need a valid password")
-    }
-
-    //Check valid data
-    if(validEmail.test(userMail)){
-      true
-
-    }else{
-
-      throw new Error("Invalid user mail, we need a valid email")
-    }
-
-    return true
-  }
-  catch(ex){
-    console.error("Error while validating user data: ", ex.message)
-
-    return false
-  }
-}
+//------------------------------------------------------------------------------FirebaseFunctions
 
 export async function getUsers(){
-    const docs = await getDocs(collection(db, "users"))
+  const docs = await getDocs(collection(db, "users"))
 
-    return (docs.docs.map(doc => doc.data()))
-}
-
-export async function checkUserExist(userMail, nickname){
-  try{
-
-    if(!validatedUserData(userMail, nickname, true)){
-      throw new Error("Something has happened while was validating")
-
-    }
-
-    userMail = userMail.toLowerCase()
-    nickname = nickname.toLowerCase()
-
-    const users = await getUsers()
-
-    const userMailExist = users.find(user => user.profile.mail.toLowerCase() === userMail) ? true : false
-    const nicknameExist = users.find(user => user.profile.name.toLowerCase() === nickname) ? true : false
-
-    const matchingData = {
-      mail: userMailExist,
-      nickname: nicknameExist
-    }
-
-    return matchingData    
-  }
-  catch(ex){
-    console.error("Something has happened!: ", ex.message)
-
-    return undefined
-
-  }
-
+  return (docs.docs.map(doc => doc.data()))
 }
 
 export async function createUser(userMail, nickname, password){
@@ -136,18 +70,241 @@ export async function createUser(userMail, nickname, password){
 export async function getUserProfile(data)/*mail or nickname*/{
   const users = await getUsers()
 
-  console.log(1)
-
-  const userFound = users.find(user => user.profile.mail === data || user.profile.name === data)
-
-  console.log(userFound)
+  const userFound = users.find(user => user.profile.mail.toLowerCase() === data.toLowerCase() || user.profile.name === data)
 
   return userFound ? userFound : false
 }
 
+export async function getUserGuides(mail){
+  const userProfile = await getUserProfile(mail)
+
+  const guides = userProfile.guides
+
+  return guides
+}
+
+async function getUserDoc(userMail){
+  const userDocs = await getDocs(collection(db, "users"))
+
+  let userDoc = false
+
+  userDocs.docs.forEach(user => {
+    if(user.data().profile.mail === userMail){
+
+      userDoc = user
+    }
+  })
+  
+  return userDoc
+}
+
+export async function updateUser(userMail, newUserData){
+
+  const userDoc = await getUserDoc(userMail)
+  
+  const ref = doc(db, "users", userDoc.id)
+  
+  await setDoc(ref, newUserData)
+  
+}
+
+export async function createGuide(userMail){
+  const date = new Date()
+  let profile = await getUserProfile(userMail)
+  
+  return generateGuideCode().then(async code => {
+    
+    const newGuide = {
+      code,
+      name: "New Guide",
+      privated:  true,
+      allowedUsers: [],
+      date: {
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+        hour: date.getHours(),
+        minute: date.getMinutes(),
+        seconds: date.getSeconds()
+      },
+      steps: [
+          {
+              title: "Step one",
+              content: [
+                  {
+                      type: "text",
+                      value: "Content of this step"
+                  }
+              ]
+          }
+      ]
+  
+  }
+
+  profile.guides.push(newGuide)
+
+  await updateUser(userMail, profile)
+
+  return code
+
+  })
+
+}
+
+async function getAllGuides(){
+  const users = await getUsers()
+
+  let guides = []
+
+  users.forEach(user => {
+    user.guides.forEach(guide => {
+      guides.push(guide)
+    })
+  })
+
+  return guides
+}
+
+export async function getGuide(code){
+  const guides = await getAllGuides()
+
+  const guideFound = guides.find(guide => guide.code === code)
+
+  return guideFound
+}
+
+export async function getGuideData(code){
+  const users = await getUsers()
+
+  let owner
+  let privated
+  let allowedUsers 
+
+  users.forEach(user => {
+    user.guides.forEach(guide => {
+
+      if(guide.code === code){
+        owner = user.profile.mail
+        privated = guide.privated
+        allowedUsers = guide.allowedUsers
+
+      }
+
+    })
+  })
+
+  return {
+    owner,
+    privated,
+    allowedUsers
+  }
+
+}
+
+export async function userIsAllowed(userMail, guideCode){
+  const guideData = await getGuideData(guideCode)
+
+  const userIsAllowed = guideData.allowedUsers.indexOf(userMail) ? true : guideData.owner === userMail
+
+  return userIsAllowed
+}
+
+export async function updateGuide(userMail, guideCode, newGuide){
+  const isAllowed = await userIsAllowed(userMail, guideCode)
+
+  if(!isAllowed){
+    return false
+  }
+
+  const guideData = await getGuideData(guideCode)
+
+  const owner = guideData.owner
+  const ownerProfile = await getUserProfile(owner)
+  let newOwnerProfile = {...ownerProfile}
+  
+  newOwnerProfile.guides = newOwnerProfile.guides.map(guide => {
+
+    if(guide.code === guideCode){
+      return newGuide
+    }else{
+      return guide
+    }
+
+  })
+
+  updateUser(owner, newOwnerProfile)
+}
+
+//------------------------------------------------------------------------------FUNTIONS
+
+export function validatedUserData(userMail, nickname, password){
+
+  const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+
+  try{
+    //Check if exist all data
+    if(!userMail){
+      throw new Error("I need a valid user mail")
+    }
+    if(!nickname){
+      throw new Error("I need a valid nickname")
+    }
+    if(!password){
+      throw new Error("I need a valid password")
+    }
+
+    //Check valid data
+    if(validEmail.test(userMail)){
+      true
+
+    }else{
+
+      throw new Error("Invalid user mail, we need a valid email")
+    }
+
+    return true
+  }
+  catch(ex){
+    console.error("Error while validating user data: ", ex.message)
+
+    return false
+  }
+}
+
+export async function checkUserExist(userMail, nickname){
+  try{
+
+    if(!validatedUserData(userMail, nickname, true)){
+      throw new Error("Something has happened while was validating")
+
+    }
+
+    userMail = userMail.toLowerCase()
+    nickname = nickname.toLowerCase()
+
+    const users = await getUsers()
+
+    const userMailExist = users.find(user => user.profile.mail.toLowerCase() === userMail) ? true : false
+    const nicknameExist = users.find(user => user.profile.name.toLowerCase() === nickname) ? true : false
+
+    const matchingData = {
+      mail: userMailExist,
+      nickname: nicknameExist
+    }
+
+    return matchingData    
+  }
+  catch(ex){
+    console.error("Something has happened!: ", ex.message)
+
+    return undefined
+
+  }
+
+}
+
 export async function loginUser(userMail, password){ 
   userMail = userMail.toLowerCase()
-  password = password.toLowerCase()
   
   try{
     if(!validatedUserData(userMail, true, password)){
@@ -156,12 +313,11 @@ export async function loginUser(userMail, password){
 
     const users = await getUsers()
 
-    const userFound = users.find(user => user.profile.mail === userMail && user.profile.password === password)
+    const userFound = users.find(user => user.profile.mail.toLowerCase() === userMail && user.profile.password === password)
+
 
     if(userFound){
       const profile = await getUserProfile(userMail)
-
-      console.log(profile)
 
       setUser(profile.profile.mail, profile.profile.name)
 
@@ -169,10 +325,37 @@ export async function loginUser(userMail, password){
 
     }else{
 
+      setNotification("Email or password is not valid", "error")
+
       throw new Error("Email or password is not valid")
     }
 
   }catch(ex){
     console.error("Impossible to login: ", ex.message)
+  }
+}
+
+async function generateGuideCode(){
+  const users = await getUsers()
+
+  let code = crypto.randomUUID()
+
+  let codeExist = false
+
+  for(const user in users){
+    if(user.guides){
+      codeExist = user.guides.forEach(guide => guide.code === code)
+
+      if (codeExist){
+        break
+      }
+    }
+  }
+
+  if(codeExist){
+    generateGuideCode()
+
+  }else{
+    return code
   }
 }

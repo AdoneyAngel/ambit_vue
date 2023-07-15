@@ -8,13 +8,36 @@
 </template>
 
 <script>
+import { userIsLogged } from './API/localStorage';
 import VisualNotification from './components/VisualNotification.vue';
+import router from './routes/appRouter';
 
 export default {
   name: 'App',
   components: {
     VisualNotification
-}
+},
+created() {
+
+  this.$watch(
+    () => this.$route.params,
+    () => {
+
+      const isLogged = userIsLogged()
+      const location = window.location.hash
+
+      if(!isLogged && location != "#/login/signin" && location != "#/login/signup"){
+          router.push("/login/signup")
+      }
+
+      for (var i = 1; i < 99999; i++) {
+        clearTimeout(i);
+      }
+
+    }
+    )
+  }
+
 }
 </script>
 
@@ -39,7 +62,7 @@ body{
   overflow: hidden;
   background: url("@/assets/images/pointGrey.png") var(--background);
   background-repeat: repeat;
-  background-size: 15px;
+  background-size: 1%;
 }
 
 </style>

@@ -4,6 +4,7 @@ import LoginPage from "@/pages/login/LoginIndex.vue"
 import SignUpForm from "@/pages/login/forms/SignUp.vue"
 import SignInForm from "@/pages/login/forms/SignIn.vue"
 import PrincipalPage from "@/pages/guides/guidesList/LayoutPage.vue"
+import GuideEditor from "@/pages/guides/guideEditor/LayoutPage.vue"
 
 const appRoutes = [
     {
@@ -26,6 +27,12 @@ const appRoutes = [
         path: "/",
         component: PrincipalPage,
         name: "home"
+    },
+    {
+        path: "/editor/:guideCode",
+        name: "guideeditor",
+        component: GuideEditor,
+        props: true
     }
 ]
 

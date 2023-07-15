@@ -95,9 +95,10 @@ section{
 }
 #logo{
     position: fixed;
-    width: 70%;
+    width: 1350px;
     left: 40%;
-    top: -50%;
+    bottom: 0;
+    transform: translate(0, -30px);
 }
 header{
     display: flex;

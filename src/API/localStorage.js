@@ -1,3 +1,4 @@
+
 const storage = window.localStorage
 export default storage
 
@@ -18,4 +19,9 @@ export function setUser(mail, nickname){
     setData("userNickname", nickname)
 
     return true
+}
+
+export function getData(name){
+    return storage.getItem(name)
+
 }

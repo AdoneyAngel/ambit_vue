@@ -1,5 +1,5 @@
 <template>
-    <div id="notificationContainer">
+    <div id="notificationContainer" v-if="notificationsList.length">
         <div v-for="notify in notificationsList" :key="notify.id" :class="notify.type == 'error' ? 'notifyImportant' : 'notifyNormal'">
             {{ notify.content }}
         </div>
@@ -9,15 +9,12 @@
 <script>
 import {notifications} from "@/assets/notifications"
 
-const notificationss = notifications
-
 export default {
     data(){
         return {
             notificationsList: notifications.data
         }
-    },
-    created: () => console.log(notificationss)
+    }
 }
 
 </script>
