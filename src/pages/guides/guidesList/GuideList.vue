@@ -9,6 +9,7 @@
             :style="{
                 boxShadow: contextMenuGuideItem === guide ? '0px 6px 8px rgb(0 0 0 / 15%)' : 'none'
             }"
+            @click="handleGuideClick(guide.code)"
             >
             <div class="guideItemInfo">
 
@@ -37,9 +38,9 @@
             </div>
 
             <div v-if="contextMenuGuideItem === guide" class="guideContextMenu">
-                <button>Edit</button>
-                <button>Delete</button>
-                <button>Info</button>
+                <router-link class="btnContextMenu" :to="'/editor/'+guide.code">Edit</router-link>
+                <button class="btnContextMenu">Delete</button>
+                <button class="btnContextMenu">Info</button>
             </div>    
         </li>
 
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+import router from '@/routes/appRouter';
 import { ref } from 'vue';
 
 export default {
@@ -65,6 +67,12 @@ export default {
                 
             }else {
                 this.contextMenuGuideItem = guide
+            }
+        },
+        handleGuideClick(guideCode){
+            if (this.contextMenuGuideItem.code !== guideCode){
+                router.push(`/visualizer/${guideCode}`)
+
             }
         }
     }
@@ -171,7 +179,7 @@ export default {
     animation: showGuideContextMenu .3s var(--animationTransition);
     height: 120px;
 }
-.guideContextMenu > button{
+.guideContextMenu > .btnContextMenu{
     margin: 2px 0px;
     padding: 2px 0;
     background: transparent;
@@ -181,8 +189,9 @@ export default {
     justify-content: center;
     color: black;
     font-weight: 300;
+    text-decoration: none;
 }
-.guideContextMenu > button:hover{
+.guideContextMenu > .btnContextMenu:hover{
     box-shadow: none;
 }
 

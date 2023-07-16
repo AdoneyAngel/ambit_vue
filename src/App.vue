@@ -58,6 +58,13 @@ created() {
   outline: none;
   transition: .3s;
 }
+*::-webkit-scrollbar{
+    background: transparent;
+}
+*::-webkit-scrollbar-thumb{
+    background: var(--greypurple);
+    border-radius: 100px;
+}
 body{
   overflow: hidden;
   background: url("@/assets/images/pointGrey.png") var(--background);

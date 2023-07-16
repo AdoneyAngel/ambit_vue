@@ -170,7 +170,7 @@ export async function getGuide(code){
 
   const guideFound = guides.find(guide => guide.code === code)
 
-  return guideFound
+  return guideFound ? guideFound : false
 }
 
 export async function getGuideData(code){
@@ -179,6 +179,7 @@ export async function getGuideData(code){
   let owner
   let privated
   let allowedUsers 
+  let nickname
 
   users.forEach(user => {
     user.guides.forEach(guide => {
@@ -187,6 +188,7 @@ export async function getGuideData(code){
         owner = user.profile.mail
         privated = guide.privated
         allowedUsers = guide.allowedUsers
+        nickname = user.profile.name
 
       }
 
@@ -196,7 +198,8 @@ export async function getGuideData(code){
   return {
     owner,
     privated,
-    allowedUsers
+    allowedUsers,
+    nickname
   }
 
 }

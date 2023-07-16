@@ -5,6 +5,7 @@ import SignUpForm from "@/pages/login/forms/SignUp.vue"
 import SignInForm from "@/pages/login/forms/SignIn.vue"
 import PrincipalPage from "@/pages/guides/guidesList/LayoutPage.vue"
 import GuideEditor from "@/pages/guides/guideEditor/LayoutPage.vue"
+import GuideVisualizer from "@/pages/guides/visualizer/GuideVisualizer.vue"
 
 const appRoutes = [
     {
@@ -32,6 +33,12 @@ const appRoutes = [
         path: "/editor/:guideCode",
         name: "guideeditor",
         component: GuideEditor,
+        props: true
+    },
+    {
+        path: "/Visualizer/:guideCode",
+        name: "guidevisualizer",
+        component: GuideVisualizer,
         props: true
     }
 ]

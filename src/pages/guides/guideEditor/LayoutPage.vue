@@ -2,7 +2,7 @@
     <div v-if="uploading" class="uploadingContainer">
         <img :src="uploadIcon" alt="">
     </div>
-    <main>
+    <main class="guideEditorContainer">
         <input @change="e => handleUpdateInputs(e)" name="guideName" class="editorTitle" type="text" :placeholder="initialGuide.name">
         <section class="stepsContainer">
             <div class="guideStep" v-for="(step, stepIndex) in currentGuide.steps" :key="stepIndex">
@@ -36,6 +36,19 @@
             <button class="btnAdd" @click="addNewStep()">New step</button>
         </div>
     </main>
+
+    <div class="guideSettingsButtonContainer">
+        <button @click="guideSettingsToggle">
+            <img :class="openGuideSettings ? 'opened' : 'closed'" :src="settingsIcon">
+        </button>
+    </div>
+
+    <div class="guideSettings" v-if="openGuideSettings">
+
+        <GuideSettingsDisplay :guide="currentGuide" :callBack="handleUpdateSettings"/>
+        
+    </div>
+
 </template>
 
 <script>
@@ -43,6 +56,8 @@ import { getGuide, updateGuide } from '@/API/DB/db';
 import { getData } from '@/API/localStorage';
 import { ref } from 'vue';
 import uploadIcon from "@/assets/images/up.png"
+import settingsIcon from "@/assets/images/setting.png"
+import GuideSettingsDisplay from '@/components/GuideSettingsDisplay.vue';
 
 export default {
     data(){
@@ -50,8 +65,13 @@ export default {
             initialGuide: ref({}),
             currentGuide: ref({}),
             uploading: ref(false),
-            uploadIcon
+            uploadIcon,
+            settingsIcon,
+            openGuideSettings: ref(false)
         }
+    },
+    components: {
+        GuideSettingsDisplay
     },
     props: {
         guideCode: String
@@ -135,6 +155,10 @@ export default {
 
             }
         },
+        handleUpdateSettings(settings){
+            this.currentGuide.privated = settings.privated
+            this.currentGuide.allowedUsers = settings.allowedUsers
+        },
         async autoSaveGuide(){
             let guideToSend = {
             code: this.currentGuide.code,
@@ -182,6 +206,9 @@ export default {
 
             stepPos
             event
+        },
+        guideSettingsToggle(){
+            this.openGuideSettings = !this.openGuideSettings
         }
     }
 }
@@ -190,7 +217,7 @@ export default {
 
 <style scoped>
 
-main{
+.guideEditorContainer{
     display: flex;
     flex-direction: column;
     width: 85%;
@@ -296,13 +323,6 @@ section{
     overflow-y: auto;
     padding-top: 60px;
 }
-.stepsContainer::-webkit-scrollbar{
-    background: transparent;
-}
-.stepsContainer::-webkit-scrollbar-thumb{
-    background: var(--greypurple);
-    border-radius: 100px;
-}
 .uploadingContainer{
     display: flex;
     justify-content: center;
@@ -322,7 +342,70 @@ section{
     opacity: 1;
     filter: drop-shadow(0px 0px 4px var(--purple));
 }
+.guideSettingsButtonContainer{
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.guideSettingsButtonContainer > button{
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+}
+.guideSettingsButtonContainer > button:hover{
+    background: white;
+    box-shadow: none;
+}
+.guideSettingsButtonContainer > button:hover > .closed{
+    transform: rotate(10deg);
+}
+.guideSettingsButtonContainer > button > img{
+    height: 60%;
+    transition: 1s var(--animationTransition);
+}
+img.closed{
+    animation: rotateClosedSettingIcon 1s var(--animationTransition);
+}
+img.opened{
+    transform: rotate(-90deg);
+    animation: rotateOpenedSettingIcon 1s var(--animationTransition);
+}
+.guideSettings{
+    position: absolute;
+    z-index: 4;
+    bottom: 60px;
+    right: 20px;
+    width: 200px;
+}
 
+@keyframes rotateClosedSettingIcon{
+    0%{
+        filter: blur(0.5px);
+    }
+    100%{
+        filter: blur(0px);
+    }
+}
+@keyframes rotateOpenedSettingIcon{
+    0%{
+        filter: blur(0.5px);
+    }
+    100%{
+        filter: blur(0px);
+    }
+}
 @keyframes showContent{
     0%{
         opacity: 0;
