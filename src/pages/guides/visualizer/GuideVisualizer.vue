@@ -14,10 +14,10 @@
                 </div>
 
             </div>
-            <p class="guideOwner">{{ guideData.nickname }}</p>
+            <p v-if="!guideRelation.isOwner" class="guideOwner">{{ guideData.nickname }}</p>
 
-            <div class="guideFooter">
-                <button @click="joinGuide(this.userMail, this.guideCode)" v-if="!guideRelation.isJoined">Join</button>
+            <div class="guideFooter" v-if="guide.code">
+                <button @click="joinGuide(this.userMail, this.guideCode)" v-if="!guideRelation.isJoined && !guideRelation.isOwner">Join</button>
             </div>
         </section>
     </main>
