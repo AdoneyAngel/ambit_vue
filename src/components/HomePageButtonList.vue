@@ -14,7 +14,8 @@
 
         <button 
             @mouseleave="handleMouseLeave" 
-            @mouseenter="e => handleMouseHover(e)">Search</button>
+            @mouseenter="e => handleMouseHover(e)"
+            @click="route.push('/search')">Search</button>
 
         <button 
             @mouseleave="handleMouseLeave" 
@@ -28,6 +29,7 @@ import { createGuide } from '@/API/DB/db';
 import { getData } from '@/API/localStorage';
 import router from '@/routes/appRouter';
 import { ref } from 'vue';
+import route from '@/routes/appRouter';
 
 
 export default{
@@ -37,7 +39,8 @@ export default{
             backgroundPosX: ref(0),
             backgroundWidth: ref(100),
             backgroundHeight: ref(100),
-            backgroundOpacity: ref(0)
+            backgroundOpacity: ref(0),
+            route
         }
     },
     methods: {
@@ -91,6 +94,7 @@ button{
     width: 80%;
     border-radius: 100px;
     background: transparent;
+    cursor: pointer;
 }
 button:hover{
     box-shadow: none;

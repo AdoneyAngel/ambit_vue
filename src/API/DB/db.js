@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import { setUser } from "../localStorage";
+import { getData, setUser } from "../localStorage";
 import { setNotification } from "@/assets/notifications";
 
 
@@ -105,6 +105,8 @@ export async function updateUser(userMail, newUserData){
   const ref = doc(db, "users", userDoc.id)
   
   await setDoc(ref, newUserData)
+
+  return true
   
 }
 
@@ -151,14 +153,28 @@ export async function createGuide(userMail){
 
 }
 
-async function getAllGuides(){
+async function getAllGuides(owner){
   const users = await getUsers()
 
   let guides = []
 
   users.forEach(user => {
     user.guides.forEach(guide => {
-      guides.push(guide)
+      
+      if(owner){
+          guides.push({
+            guide,
+            owner: {
+              mail: user.profile.mail,
+              nickname: user.profile.name
+            }
+          })
+
+      }else{
+          guides.push(guide)
+
+      }
+
     })
   })
 
@@ -361,4 +377,94 @@ async function generateGuideCode(){
   }else{
     return code
   }
+}
+
+export async function searchAllGuides(guideName){
+  const guides = await getAllGuides(true)
+
+  guideName = guideName.toLowerCase()
+
+  const guidesFound = guides.filter(guide => guide.guide.name.toLowerCase().indexOf(guideName) != -1)
+
+  return guidesFound
+}
+
+export async function searchAllAllowedGuides(guideName){
+  const userMail = getData("userMail")
+  const guidesFound = await searchAllGuides(guideName)
+
+  const allowedGuides = guidesFound.filter(guide => ((guide.guide.allowedUsers.indexOf(userMail) != -1 && guide.guide.privated) || (!guide.guide.privated) || (guide.owner.mail === userMail)))
+
+  return allowedGuides
+}
+
+export async function joinUserToGuide(userMail, guideCode){
+  let user = await getUserProfile(userMail)
+
+  let updatedUser = {...user}
+
+  updatedUser.joinedGuides.push(guideCode)
+
+  await updateUser(userMail, updatedUser)
+
+  return true
+
+}
+
+export async function getGuideRelation(userMail, guideCode){
+  const guideData = await getGuideData(guideCode)
+  const userProfile = await getUserProfile(userMail)
+
+  const isOwner = guideData.owner === userMail
+
+  const isAllowed = guideData.allowedUsers.indexOf(userMail) != -1 || !guideData.privated
+
+  const isJoined = userProfile.joinedGuides.indexOf(guideCode) != -1
+
+  return {
+    isOwner,
+    isAllowed,
+    isJoined
+  }
+
+}
+
+export async function getJoinedGuides(userMail){
+
+  const profile = await getUserProfile(userMail)
+
+  let joinedGuides = []
+
+  for(const guide of profile.joinedGuides){
+    const guideData = await getGuide(guide)
+
+    joinedGuides.push(guideData)
+  }
+
+  return joinedGuides
+
+}
+
+export async function deleteGuide(guideCode){
+  const guideData = await getGuideData(guideCode)
+
+  const userProfile = await getUserProfile(guideData.owner)
+
+  let newProfile = {...userProfile}
+  newProfile.guides = newProfile.guides.filter(guide => guide.code != guideCode)
+
+  await updateUser(guideData.owner, newProfile)
+
+  return true
+}
+
+export async function deleteJoinedGuide(userMail, guideCode){
+  const userProfile = await getUserProfile(userMail)
+
+  let newProfile = {...userProfile}
+  newProfile.joinedGuides = newProfile.joinedGuides.filter(guide => guide !== guideCode)
+
+  await updateUser(userMail, newProfile)
+
+  return true
 }

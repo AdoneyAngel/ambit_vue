@@ -1,5 +1,5 @@
 <template>
-
+  <principal-header />
   <main id="app">
     <router-view></router-view>
     <visual-notification></visual-notification>
@@ -11,11 +11,13 @@
 import { userIsLogged } from './API/localStorage';
 import VisualNotification from './components/VisualNotification.vue';
 import router from './routes/appRouter';
+import principalHeader from "@/components/pagePrincipalHeader.vue"
 
 export default {
   name: 'App',
   components: {
-    VisualNotification
+    VisualNotification,
+    principalHeader
 },
 created() {
 

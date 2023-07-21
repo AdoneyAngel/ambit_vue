@@ -10,7 +10,8 @@
 
             <section class="guideListContainer">
 
-                <GuideList :guides="userGuides" />
+                <!--GUIDES VISUALIZATION-->
+                <router-view />
 
                 <div class="guideNav" id="guideNav">
 
@@ -19,16 +20,18 @@
                         width: `${guideNavbuttonBackgroundWidth}px`
                     }"></div>
 
-                    <button 
+                    <RouterLink
+                        to="owner"
                         @click="(e) => handleGuideListButton(e)" 
                         :class="{'selectedNavButton' : guideNavSelected === 'myGuideNavButton'}" 
                         id="myGuideNavButton"
-                        >My guides</button>
+                        >My guides</RouterLink>
 
-                    <button 
+                    <RouterLink
+                        to="joined"
                         @click="(e) => handleGuideListButton(e)" 
                         :class="{'selectedNavButton' : guideNavSelected === 'jonedNavButton'}" 
-                        id="jonedNavButton">Joined</button>
+                        id="jonedNavButton">Joined</RouterLink>
                 </div>
 
             </section>
@@ -44,33 +47,20 @@
 </template>
 
 <script>
-import { getData } from "@/API/localStorage"
-import { getUserGuides } from "@/API/DB/db"
 import { ref } from "vue";
-import GuideList from "./GuideList.vue";
 import HomePageButtonList from "@/components/HomePageButtonList.vue"
+import "@/styles/guideList.css"
 
 export default {
     components: {
-        GuideList,
         HomePageButtonList
     },
     data(){
         return{
-            userGuides: ref([]),
-            userMail: ref(""),
             guideNavbuttonBackgroundPosX: ref(10),
             guideNavbuttonBackgroundWidth: ref(150),
             guideNavSelected: ref("myGuideNavButton")
         }
-    },
-    mounted(){
-        this.userMail = ref(getData("userMail"))
-
-        getUserGuides(this.userMail).then(res => {
-            
-            this.userGuides = res
-        })
     },
     methods: {
         handleGuideListButton(event){
@@ -130,7 +120,7 @@ main{
     padding: 10px;
     height: 35px;
 }
-.guideNav > button{
+.guideNav > a{
     margin-top: 0;
     min-width: 150px;
     border: none;
@@ -144,8 +134,9 @@ main{
     font-size: 17px;
     padding: 7px 0;
     z-index: 3;
+    text-decoration: none;
 }
-.guideNav > button:hover{
+.guideNav > a:hover{
     box-shadow: none;
 
 }

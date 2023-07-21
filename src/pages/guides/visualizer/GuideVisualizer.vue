@@ -15,31 +15,51 @@
 
             </div>
             <p class="guideOwner">{{ guideData.nickname }}</p>
+
+            <div class="guideFooter">
+                <button @click="joinGuide(this.userMail, this.guideCode)" v-if="!guideRelation.isJoined">Join</button>
+            </div>
         </section>
     </main>
 </template>
 
 <script>
 import { ref } from "vue"
-import { getGuide, getGuideData } from "@/API/DB/db.js"
+import { getGuide, getGuideData, getGuideRelation, joinUserToGuide } from "@/API/DB/db.js"
+import { getData } from "@/API/localStorage"
 
 export default {
     data(){
         return {
             guide: ref({}),
             guideData: ref({}),
-            guideStepPrevScroll: ref(0)
+            guideStepPrevScroll: ref(0),
+            guideRelation: ref({}),
+            userMail: ref(""),
+            joinUserToGuide
         }
     },
     props: {
         guideCode: String
     },
     async created(){
+        const userMail = getData("userMail")
         const guide = await getGuide(this.guideCode)
         const guideData = await getGuideData(this.guideCode)
+        const guideRelation = await getGuideRelation(userMail, this.guideCode)
 
         this.guide = guide
         this.guideData = guideData
+        this.userMail = userMail
+        this.guideRelation = guideRelation
+    },
+    methods: {
+        async joinGuide(userMail, guideCode){
+            await joinUserToGuide(this.userMail, this.guideCode)
+
+            this.guideRelation = await getGuideRelation(userMail, guideCode)
+
+        }
     }
 }
 
@@ -114,4 +134,17 @@ main{
     content: "<";
     margin-left: 10px;
 }
+.guideFooter{
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    display: flex;
+    justify-content: left;
+}
+.guideFooter > button{
+    margin: 0;
+    border-radius: 100px;
+    box-shadow: 0px 0px 10px var(--purple);;
+}
+
 </style>

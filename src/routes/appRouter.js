@@ -6,6 +6,10 @@ import SignInForm from "@/pages/login/forms/SignIn.vue"
 import PrincipalPage from "@/pages/guides/guidesList/LayoutPage.vue"
 import GuideEditor from "@/pages/guides/guideEditor/LayoutPage.vue"
 import GuideVisualizer from "@/pages/guides/visualizer/GuideVisualizer.vue"
+import OwnerGuideList from "@/pages/guides/guidesList/OwnerGuideList.vue"
+import JoinedGuideList from "@/pages/guides/guidesList/JoinedGuideList.vue"
+import SearchGuide from "@/pages/guides/search/SearchGuide.vue"
+import FoundGuideList from "@/components/FoundGuidesList.vue"
 
 const appRoutes = [
     {
@@ -27,7 +31,20 @@ const appRoutes = [
     {
         path: "/",
         component: PrincipalPage,
-        name: "home"
+        children: [
+            {
+                path: "/owner",
+                component: OwnerGuideList,
+                name: "ownerguides"
+
+            },
+            {
+                path: "/joined",
+                component: JoinedGuideList,
+                name: "joinedguides"
+
+            }
+        ]
     },
     {
         path: "/editor/:guideCode",
@@ -40,6 +57,20 @@ const appRoutes = [
         name: "guidevisualizer",
         component: GuideVisualizer,
         props: true
+    },
+    {
+        path: "/search",
+        name: "searchguide",
+        props: true,
+        component: SearchGuide,
+        children: [
+            {
+                path: ":guideName",
+                component: FoundGuideList,
+                name: "guidesfound",
+                props: true
+            }
+        ]
     }
 ]
 

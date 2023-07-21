@@ -34,6 +34,9 @@
 
         <div class="editorFooter">
             <button class="btnAdd" @click="addNewStep()">New step</button>
+            <button @click="saveGuide" class="btnAdd">
+                <img :src="uploadButtonIcon">
+            </button>
         </div>
     </main>
 
@@ -57,6 +60,7 @@ import { getData } from '@/API/localStorage';
 import { ref } from 'vue';
 import uploadIcon from "@/assets/images/up.png"
 import settingsIcon from "@/assets/images/setting.png"
+import uploadButtonIcon from  "@/assets/images/upload2.png"
 import GuideSettingsDisplay from '@/components/GuideSettingsDisplay.vue';
 
 export default {
@@ -67,7 +71,8 @@ export default {
             uploading: ref(false),
             uploadIcon,
             settingsIcon,
-            openGuideSettings: ref(false)
+            openGuideSettings: ref(false),
+            uploadButtonIcon
         }
     },
     components: {
@@ -159,7 +164,8 @@ export default {
             this.currentGuide.privated = settings.privated
             this.currentGuide.allowedUsers = settings.allowedUsers
         },
-        async autoSaveGuide(){
+        async saveGuide(){
+
             let guideToSend = {
             code: this.currentGuide.code,
             name: this.currentGuide.name,
@@ -186,6 +192,10 @@ export default {
             await updateGuide(userMail, guideToSend.code, guideToSend)
 
             this.uploading = false
+        },
+        async autoSaveGuide(){
+            
+            this.saveGuide()
 
             setTimeout(async () => {await this.autoSaveGuide()}, 10000)
         
@@ -295,12 +305,17 @@ section{
     background: white;
 }
 .editorFooter{
-    position: sticky;
-    bottom: 0;
-    width: 100%;
+    position: absolute;
+    bottom: 50px;
+    width: 97%;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    left: 0;
 }
 .editorFooter > .btnAdd{
-    bottom: -20px;
+    margin: 0 10px;
+    position: relative;
 }
 .btnAdd{
     position: absolute;
@@ -308,6 +323,9 @@ section{
     right: 0;
     box-shadow: 0px 0px 10px var(--purple);
     border-radius: 100px;
+}
+.btnAdd > img{
+    width: 20px;
 }
 .btnAddContent{
     text-align: center;
@@ -329,7 +347,7 @@ section{
     align-items: center;
     position: absolute;
     top: 20px;
-    right: 20px;
+    right: 40px;
     z-index: 5;
     width: 45px;
     height: 45px;
