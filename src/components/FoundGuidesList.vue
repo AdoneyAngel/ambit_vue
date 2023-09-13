@@ -71,6 +71,7 @@ export default {
     backdrop-filter: blur(2.5px);
     padding: 10px 15px;
     border-radius: 10px;
+    cursor: pointer;
 }
 .guideFound > h2{
     margin-bottom: 10px;
