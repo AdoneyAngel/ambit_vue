@@ -3,7 +3,7 @@
         <h1>Search</h1>
         <form @submit.prevent="handleSubmit">
             <div class="inputContainer">
-                <input @change="e => handleWrite(e)" type="text" placeholder="Guide Name">
+                <input @change="e => handleWrite(e)" type="text" placeholder="Type Here">
             </div>
         </form>
         <div class="guidesContainer">
