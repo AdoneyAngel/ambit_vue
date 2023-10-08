@@ -1,15 +1,17 @@
 <template>
     <main>
+        
+        <GuideStepTitleList v-if="guide && guide.steps" :guideTitles="guide.steps.map(step => step.title)" />
+
         <section class="guideContainer">
 
-            <GuideStepTitleList v-if="guide.steps.length" :guideTitles="guide.steps.map(step => step.title)" />
 
             <h1>{{ guide.name }}</h1>
 
             <div class="guideSteps">
 
                 <div class="guideStepItem" v-for="(step, stepIndex) in guide.steps" :key="stepIndex">
-                    <h2>{{ step.title }}</h2>
+                    <h2 :id="`itemPos=${stepIndex}`">{{ step.title }}</h2>
 
                     <div class="stepContent" v-for="(item, itemIndex) in step.content" :key="itemIndex">
                         <pre>{{ item.value }}</pre>
@@ -30,6 +32,8 @@
 import { ref } from "vue"
 import { getGuide, getGuideData, getGuideRelation, joinUserToGuide } from "@/API/DB/db.js"
 import { getData } from "@/API/localStorage"
+
+import "@/styles/guideStepTitleListVisualizer.css"
 
 import GuideStepTitleList from "@/components/GuideStepTitleList.vue"
 
@@ -121,6 +125,7 @@ main{
     margin-bottom: 20px;
     font-size: 28px;
     border-bottom: 3px solid rgb(221, 221, 221);
+    color: #515151;
 }
 .stepContent{
     padding: 0 20px;

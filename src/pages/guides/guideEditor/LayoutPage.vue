@@ -3,7 +3,7 @@
         <img :src="uploadIcon" alt="">
     </div>
 
-    <GuideStepTitleList v-if="stepTitles.length" :guideTitles="currentGuide.steps.map(step => step.title)" />
+    <GuideStepTitleList v-if="currentGuide.steps" :guideTitles="currentGuide.steps.map(step => step.title)" />
 
     <main class="guideEditorContainer">
         <input @change="e => handleUpdateInputs(e)" name="guideName" class="editorTitle" type="text" :placeholder="initialGuide.name">
