@@ -229,16 +229,6 @@ export default {
         },
         guideSettingsToggle(){
             this.openGuideSettings = !this.openGuideSettings
-        },
-        setGuideTitles() {
-            this.stepTitles = this.currentGuide.steps.map(step => step.title)
-        }
-    },
-    watch: {
-        'currentGuide': {
-            handler() {
-                this.setGuideTitles()
-            }
         }
     }
 }
