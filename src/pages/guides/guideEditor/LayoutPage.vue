@@ -2,6 +2,9 @@
     <div v-if="uploading" class="uploadingContainer">
         <img :src="uploadIcon" alt="">
     </div>
+
+    <GuideStepTitleList v-if="stepTitles.length" :guideTitles="currentGuide.steps.map(step => step.title)" />
+
     <main class="guideEditorContainer">
         <input @change="e => handleUpdateInputs(e)" name="guideName" class="editorTitle" type="text" :placeholder="initialGuide.name">
         <section class="stepsContainer">
@@ -58,10 +61,15 @@
 import { getGuide, updateGuide } from '@/API/DB/db';
 import { getData } from '@/API/localStorage';
 import { ref } from 'vue';
+
 import uploadIcon from "@/assets/images/up.png"
 import settingsIcon from "@/assets/images/setting.png"
 import uploadButtonIcon from  "@/assets/images/upload2.png"
+
+import "@/styles/guideStepTitleListVisualizer.css"
+
 import GuideSettingsDisplay from '@/components/GuideSettingsDisplay.vue';
+import GuideStepTitleList from '@/components/GuideStepTitleList.vue';
 
 export default {
     data(){
@@ -72,11 +80,13 @@ export default {
             uploadIcon,
             settingsIcon,
             openGuideSettings: ref(false),
-            uploadButtonIcon
+            uploadButtonIcon,
+            stepTitles: ref([])
         }
     },
     components: {
-        GuideSettingsDisplay
+        GuideSettingsDisplay,
+        GuideStepTitleList
     },
     props: {
         guideCode: String
@@ -219,6 +229,16 @@ export default {
         },
         guideSettingsToggle(){
             this.openGuideSettings = !this.openGuideSettings
+        },
+        setGuideTitles() {
+            this.stepTitles = this.currentGuide.steps.map(step => step.title)
+        }
+    },
+    watch: {
+        'currentGuide': {
+            handler() {
+                this.setGuideTitles()
+            }
         }
     }
 }
@@ -230,15 +250,15 @@ export default {
 .guideEditorContainer{
     display: flex;
     flex-direction: column;
-    width: 85%;
+    width: 80%;
     height: 85vh;
     top: 50%;
-    left: 50%;
-    background: rgb(237 237 237 / 90%);
-    transform: translate(-50%, -50%);
+    right: 30px;
+    background: var(--visualizerContainerBackground);
+    transform: translateY(-50%);
     position: absolute;
     padding: 40px;
-    border-radius: 30px;
+    border-radius: var(--principalBorderRadius);
     overflow: hidden;
 }
 input{

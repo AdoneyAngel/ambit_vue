@@ -1,0 +1,34 @@
+#guideStepTitleList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    width: 8%;
+    background: var(--visualizerContainerBackground);
+    border-radius: var(--principalBorderRadius);
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    transform: translateY(-50%);
+    padding: 20px 20px;
+    font-size: 13px;
+    animation: showGuideStepList .4s var(--animationTransition);
+}
+#guideStepTitleList > div {
+    display: block;
+    margin: 10px 0;
+}
+#guideStepTitleList > div > h3{
+    text-decoration: underline;
+    cursor: pointer;
+    color: grey;
+}
+
+@keyframes showGuideStepList {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
