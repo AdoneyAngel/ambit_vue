@@ -52,7 +52,7 @@ export default {
 
         searchSimilarUser(this.guideName).then(users => {
             this.usersFound = {}
-            this.usersFound = users
+            this.usersFound = users.name.length || users.mail.length ? users : false
 
             this.concatenatedUsersFound = users.name.concat(users.mail);
         })
@@ -70,7 +70,7 @@ export default {
 
             searchSimilarUser(this.guideName).then(users => {
                 this.usersFound = {}
-                this.usersFound = users
+                this.usersFound = users.name.length || users.mail.length ? users : false
 
                 this.concatenatedUsersFound = users.name.concat(users.mail);
             })
