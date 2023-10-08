@@ -1,6 +1,9 @@
 <template>
     <main>
         <section class="guideContainer">
+
+            <GuideStepTitleList v-if="guide.steps.length" :guideTitles="guide.steps.map(step => step.title)" />
+
             <h1>{{ guide.name }}</h1>
 
             <div class="guideSteps">
@@ -27,6 +30,8 @@
 import { ref } from "vue"
 import { getGuide, getGuideData, getGuideRelation, joinUserToGuide } from "@/API/DB/db.js"
 import { getData } from "@/API/localStorage"
+
+import GuideStepTitleList from "@/components/GuideStepTitleList.vue"
 
 export default {
     data(){
@@ -60,6 +65,9 @@ export default {
             this.guideRelation = await getGuideRelation(userMail, guideCode)
 
         }
+    },
+    components: {
+        GuideStepTitleList
     }
 }
 
@@ -69,13 +77,13 @@ export default {
 
 main{
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     width: 100%;
     height: 100vh;
 }
 .guideContainer{
-    width: calc(80% - 100px);
+    width: calc(85% - 100px);
     height: calc(90% - 100px);
     background: rgba(255, 255, 255, .6);
     backdrop-filter: blur(3px);
@@ -83,6 +91,7 @@ main{
     padding: 50px;
     position: relative;
     overflow: hidden;
+    margin-right: 30px;
 }
 .guideContainer > h1{
     font-size: 40px;
