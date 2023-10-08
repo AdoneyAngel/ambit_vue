@@ -1,22 +1,44 @@
 <template>
-    <div class="guidesContainer">
-        <div @click="() => guideClick(guide.guide.code)" class="guideFound" v-for="(guide, index) in guidesFound" :key="index">
-            <h2>{{ guide.guide.name }}</h2>
-            <p>{{ guide.owner.nickname }}</p>
+    <div class="guidesContainer" :style="`grid-template-columns: ${guidesFound.length && usersFound ? '1fr 40%' : '1fr'}`">
+
+        <div v-if="guidesFound.length" class="guidesFound">
+            <h1>GUIDES</h1>
+
+            <div @click="() => guideClick(guide.guide.code)" class="guideFound" v-for="(guide, index) in guidesFound" :key="index">
+                <h2>{{ guide.guide.name }}</h2>
+                <p>{{ guide.owner.nickname }}</p>
+            </div>            
+        </div>
+
+        <div v-if="usersFound" class="usersFounds">
+            <h1>USERS</h1>
+
+            <div class="userFound" v-for="(user, index) in concatenatedUsersFound" :key="index">
+                <!-- <img :src="userIcon"> -->
+                <section>
+                    <h2>{{ user.name }}</h2>
+                    <p>{{ user.mail }}</p>
+                </section>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { searchAllAllowedGuides } from '@/API/DB/db';
+import { searchAllAllowedGuides, searchSimilarUser } from '@/API/DB/db';
 import router from '@/routes/appRouter';
 import { ref } from 'vue';
+
+import userIcon from "@/assets/images/user.png"
 
 
 export default {
     data(){
         return {
-            guidesFound: ref([])
+            guidesFound: ref([]),
+            usersFound: ref({}),
+            concatenatedUsersFound: ref([]),
+            userIcon
         }
     },
     props: {
@@ -26,8 +48,14 @@ export default {
     created() {
         searchAllAllowedGuides(this.guideName).then(guides => {
             this.guidesFound = this.userMail ? guides.filter(guide => guide.owner.mail !== this.userMail) : guides
-            console.log(guides)
-        }) 
+        })            
+
+        searchSimilarUser(this.guideName).then(users => {
+            this.usersFound = {}
+            this.usersFound = users
+
+            this.concatenatedUsersFound = users.name.concat(users.mail);
+        })
 
     },
     watch: {
@@ -35,12 +63,17 @@ export default {
 
             searchAllAllowedGuides(this.guideName).then(guides => {
                 this.guidesFound = []
-                this.guidesFound = this.userMail ? guides.filter(guide => guide.owner.mail != this.userMail) : guides
+                this.guidesFound = this.userMail ? guides.filter(guide => guide.owner.mail != this.userMail) : guides        
 
-                guides.forEach(guide => {
-                    console.log(guide.owner.mail)
-                })
-            })            
+
+            })             
+
+            searchSimilarUser(this.guideName).then(users => {
+                this.usersFound = {}
+                this.usersFound = users
+
+                this.concatenatedUsersFound = users.name.concat(users.mail);
+            })
         }
 
     },
@@ -57,31 +90,31 @@ export default {
 
 .guidesContainer{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(
-        300px,
-        1fr
-    ));
-    width: 100%;
-    gap: 15px;
+    gap: 20px;
     column-gap: 20px;
     overflow-y: auto;
+    padding: 30px 40px;
+    max-height: 680px;
 }
 .guideFound{
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(2.5px);
     padding: 10px 15px;
-    border-radius: 10px;
     cursor: pointer;
+    margin-bottom: 20px;
+    border: 2px solid rgb(182, 182, 182);
+    border-radius: 5px;
+    position: relative;
 }
 .guideFound > h2{
-    margin-bottom: 10px;
+    margin-bottom: 25px;
+    text-decoration: underline;
+    font-size: 22px;
 }
 .guideFound > p{
     margin-left: auto;
     text-align: right;
     opacity: .4;
     position: absolute;
-    bottom: 10px;
+    bottom: 5px;
     right: 15px;
 }
 .guideFound > p::after{
@@ -89,6 +122,33 @@ export default {
     position: relative;
     margin-left: 10px;
     color: var(--purple);
+}
+h1{
+    color: grey;
+    font-size: 20px;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: transparent;
+    backdrop-filter: blur(2px);
+    padding: 10px 14px;
+}
+.userFound {
+    border: 2px solid rgb(182, 182, 182);
+    border-radius: 5px;
+    padding: 10px 15px;
+    padding-right: 0;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-left: auto;
+}
+.userFound > h2 {
+    margin-bottom: 25px;
+}
+
+.userFound > section > p{
+    text-align: right;
 }
 
 

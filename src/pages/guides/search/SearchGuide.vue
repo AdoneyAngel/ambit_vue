@@ -85,11 +85,13 @@ input::placeholder{
     margin-bottom: 20px;
 }
 .guidesContainer{
-    max-width: 700px;
+    max-width: 800px;
+    min-width: 420px;
     width: 90%;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
-    padding: 20px 0;
+    background: var(--visualizerContainerBackground);
+    border-radius: 15px;
 }
 .guidesContainer::-webkit-scrollbar{
     display: none;

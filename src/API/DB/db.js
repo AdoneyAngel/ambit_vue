@@ -468,3 +468,15 @@ export async function deleteJoinedGuide(userMail, guideCode){
 
   return true
 }
+
+export async function searchSimilarUser(name) {
+  const allUsers = await getUsers()
+
+  const usersFound = {
+    name: allUsers.filter(user => user.profile.name.toLowerCase().includes(name.toLowerCase())).map(user => {return {name: user.profile.name, mail: user.profile.mail}}),
+    mail:  allUsers.filter(user => user.profile.mail.toLowerCase().includes(name.toLowerCase())).map(user => {return {name: user.profile.name, mail: user.profile.mail}})
+  }
+  
+  
+  return usersFound
+}
