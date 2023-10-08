@@ -1,6 +1,6 @@
 <template>
     <main>
-        <h1>Search Guide</h1>
+        <h1>Search</h1>
         <form @submit.prevent="handleSubmit">
             <div class="inputContainer">
                 <input @change="e => handleWrite(e)" type="text" placeholder="Guide Name">
