@@ -37,7 +37,7 @@ export default {
     height: 50px;
     padding: 10px 20px;
     display: block;
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
 }
 .container{
     display: flex;
