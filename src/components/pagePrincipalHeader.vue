@@ -1,8 +1,8 @@
 <template>
     <header class="principalHeader">
         <div class="container">
-            <button class="homeButton" @click="homeClick"><img :src="homeIcon" alt=""></button>
-            <button class="profileButton"><img :src="profileIcon" alt=""></button>
+            <button class="homeButton" @click="homeClick"><img :src="homeIcon"></button>
+            <button class="profileButton"><img :src="profileIcon"></button>
         </div>
     </header>
 </template>
