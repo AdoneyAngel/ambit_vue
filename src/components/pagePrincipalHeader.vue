@@ -2,18 +2,22 @@
     <header class="principalHeader">
         <div class="container">
             <button class="homeButton" @click="homeClick"><img :src="homeIcon" alt=""></button>
+            <button class="profileButton"><img :src="profileIcon" alt=""></button>
         </div>
     </header>
 </template>
 
 <script>
-import homeIcon from "@/assets/images/homeUnBordered.png"
 import router from "@/routes/appRouter";
+
+import homeIcon from "@/assets/images/homeUnBordered.png"
+import profileIcon from "@/assets/images/user.png"
 
 export default {
     data(){
         return {
-            homeIcon
+            homeIcon,
+            profileIcon
         }
     },
     methods: {
@@ -32,6 +36,8 @@ export default {
     top: 0;
     height: 50px;
     padding: 10px 20px;
+    display: block;
+    width: calc(100% - 20px);
 }
 .container{
     display: flex;
@@ -53,8 +59,11 @@ button{
 img{
     width: 100%;
 }
-.homeButton{
+button{
     cursor: pointer;
+}
+.profileButton{
+    margin-left: auto;
 }
 
 </style>
