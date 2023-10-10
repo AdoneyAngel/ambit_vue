@@ -10,6 +10,8 @@ import OwnerGuideList from "@/pages/guides/guidesList/OwnerGuideList.vue"
 import JoinedGuideList from "@/pages/guides/guidesList/JoinedGuideList.vue"
 import SearchGuide from "@/pages/guides/search/SearchGuide.vue"
 import FoundGuideList from "@/components/FoundGuidesList.vue"
+import ProfilePage from "@/pages/profile/visualizer/LayoutPage.vue"
+import ProfileVisualizer from "@/pages/profile/visualizer/ProfileVisualizer.vue"
 
 const appRoutes = [
     {
@@ -70,6 +72,20 @@ const appRoutes = [
                 name: "guidesfound",
                 props: true
             }
+        ]
+    },
+    {
+        path: "/profile",
+        name: "profile",
+        component: ProfilePage,
+        children: [
+            {
+                path: "visualizer/:userMail",
+                name: "profilevisualizer",
+                component: ProfileVisualizer,
+                props: true
+            }
+
         ]
     }
 ]

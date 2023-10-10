@@ -480,3 +480,18 @@ export async function searchSimilarUser(name) {
   
   return usersFound
 }
+
+export async function getUserData(userMail) {
+  const users = await getUsers()
+
+  const userFound = users.find(user => user.profile.mail == userMail)
+
+  const userData = {
+    mail: userFound.profile.mail,
+    name: userFound.profile.name,
+    guides: userFound.guides,
+    guidesJoined: userFound.joinedGuides
+  }
+
+  return userFound ? userData : false
+}
