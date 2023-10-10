@@ -2,7 +2,7 @@
     <header class="principalHeader">
         <div class="container">
             <button class="homeButton" @click="homeClick"><img :src="homeIcon"></button>
-            <button class="profileButton"><img :src="profileIcon"></button>
+            <button class="profileButton" @click="profileClick"><img :src="profileIcon"></button>
         </div>
     </header>
 </template>
@@ -12,17 +12,28 @@ import router from "@/routes/appRouter";
 
 import homeIcon from "@/assets/images/homeUnBordered.png"
 import profileIcon from "@/assets/images/user.png"
+import { ref } from "vue";
+import { getData } from "@/API/localStorage";
 
 export default {
     data(){
         return {
             homeIcon,
-            profileIcon
+            profileIcon,
+            profile: ref({})
         }
     },
     methods: {
         homeClick(){
             router.push("/owner")
+        },
+        profileClick() {
+            router.push(`/profile/visualizer/${this.profile.mail}`)
+        }
+    },
+    created() {
+        this.profile = {
+            mail: getData("userMail")
         }
     }
 }
