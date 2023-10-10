@@ -486,12 +486,19 @@ export async function getUserData(userMail) {
 
   const userFound = users.find(user => user.profile.mail == userMail)
 
-  const userData = {
-    mail: userFound.profile.mail,
-    name: userFound.profile.name,
-    guides: userFound.guides,
-    guidesJoined: userFound.joinedGuides
+  if (userFound){
+
+    const userData = {
+      mail: userFound.profile.mail,
+      name: userFound.profile.name,
+      guides: userFound.guides,
+      guidesJoined: userFound.joinedGuides
+    }
+
+    return userFound ? userData : false
+
   }
 
-  return userFound ? userData : false
+  return false
+
 }

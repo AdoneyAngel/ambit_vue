@@ -45,6 +45,7 @@
 
 import { getUserData } from "@/API/DB/db";
 import abstractProfileIco from "@/assets/images/abstract.png"
+import router from "@/routes/appRouter";
 import { ref } from "vue";
 
 export default {
@@ -62,10 +63,18 @@ export default {
 
     },
     created() {
-        getUserData("prueba1@gmail.com").then(profile => {
-            this.userProfile = profile
-            this.nGuides = profile.guides.length
-            this.nJoined = profile.guidesJoined.length
+
+        getUserData(this.userMail).then(profile => {
+
+            if (profile){
+                this.userProfile = profile
+                this.nGuides = profile.guides.length
+                this.nJoined = profile.guidesJoined.length
+
+            }else {
+                router.push("/")
+            }
+
         })
     }
 }
