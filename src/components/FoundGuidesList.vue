@@ -51,10 +51,14 @@ export default {
         })            
 
         searchSimilarUser(this.guideName).then(users => {
-            this.usersFound = {}
-            this.usersFound = users.name.length || users.mail.length ? users : false
+                this.usersFound = {}
+                this.usersFound = users.name.length || users.mail.length ? users : false
 
-            this.concatenatedUsersFound = users.name.concat(users.mail);
+                const allUsersFound = users.name.concat(users.mail)
+                
+                const filteredUsersFound = this.filterUsers(allUsersFound)
+
+                this.concatenatedUsersFound = filteredUsersFound
         })
 
     },
@@ -66,13 +70,18 @@ export default {
                 this.guidesFound = this.userMail ? guides.filter(guide => guide.owner.mail != this.userMail) : guides        
 
 
-            })             
+            })   
 
             searchSimilarUser(this.guideName).then(users => {
                 this.usersFound = {}
                 this.usersFound = users.name.length || users.mail.length ? users : false
 
-                this.concatenatedUsersFound = users.name.concat(users.mail);
+                const allUsersFound = users.name.concat(users.mail)
+                
+                const filteredUsersFound = this.filterUsers(allUsersFound)
+
+                this.concatenatedUsersFound = filteredUsersFound
+
             })
         }
 
@@ -84,6 +93,28 @@ export default {
         },
         userClick(userMail) {
             router.push(`/profile/visualizer/${userMail}`)
+
+        },
+        filterUsers (users) {
+            let filteredUsers = []
+
+            for (let user of users) {
+
+            let duplicated = false
+
+            for(let user2 of filteredUsers) {
+                if(user.mail === user2.mail) {
+                    duplicated = true
+                }
+            }
+
+            if(!duplicated) {
+                filteredUsers.push(user)
+            }
+
+            }
+
+            return filteredUsers
 
         }
     }
