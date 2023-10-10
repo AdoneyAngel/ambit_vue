@@ -13,7 +13,7 @@
         <div v-if="usersFound" class="usersFounds">
             <h1>USERS</h1>
 
-            <div class="userFound" v-for="(user, index) in concatenatedUsersFound" :key="index">
+            <div @click="userClick(user.mail)" class="userFound" v-for="(user, index) in concatenatedUsersFound" :key="index">
                 <!-- <img :src="userIcon"> -->
                 <section>
                     <h2>{{ user.name }}</h2>
@@ -80,6 +80,11 @@ export default {
     methods: {
         guideClick(code){
             router.push(`/visualizer/${code}`)
+
+        },
+        userClick(userMail) {
+            router.push(`/profile/visualizer/${userMail}`)
+
         }
     }
 }
