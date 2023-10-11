@@ -1,4 +1,7 @@
 <template>
+    <PopUpWindow v-if="changingPassword == true">
+        <ChangePasswordPopUp @closeFunc="closePopUp"/>
+    </PopUpWindow>
     <form @submit.prevent="handleSubmit">
         <h1>Change user data</h1>
         <section class="inputSection">
@@ -12,6 +15,7 @@
         </section>
 
         <section class="buttons">
+            <button @click="handleChangePass" class="changePasswordB">Change account password</button>
             <button class="cancelButton">Cancel</button>
             <button @click="handleChange" v-if="changeStatus == 0">Change</button>
             <button @click="handleConfirm" v-if="changeStatus == 1">Confirm</button>
@@ -25,6 +29,9 @@ import { getData } from '@/API/localStorage';
 
 import { updateUserProfile } from "@/API/DB/db"
 
+import PopUpWindow from "@/components/PopUpWindow.vue"
+import ChangePasswordPopUp from "@/components/ChangePasswordPopUp.vue"
+
 import { ref } from 'vue';
 
 
@@ -33,7 +40,8 @@ export default {
         return {
             userMail: ref(""),
             newUserName: ref(""),
-            changeStatus: ref(0)
+            changeStatus: ref(0),
+            changingPassword: ref(false)
         }
     },
     props: {
@@ -43,6 +51,10 @@ export default {
         const userMail = getData("userMail")
 
         this.userMail = userMail
+    },
+    components: {
+        PopUpWindow,
+        ChangePasswordPopUp
     },
     methods: {
         handleChange() {
@@ -64,6 +76,14 @@ export default {
                 }, 1000)
 
             }
+        },
+        handleChangePass() {
+            this.changingPassword = true
+
+        },
+        closePopUp() {
+            this.changingPassword = false
+            console.log(0)
         }
     }
 }
@@ -86,7 +106,7 @@ form > h1{
     margin-bottom: 50px;
 }
 .inputSection {
-    margin: 20px 0;
+    margin: 30px 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -129,11 +149,16 @@ form > h1{
     font-size: 20px;
     color: var(--purple);
 }
+.inputSection > button{
+    margin: 0;
+}
 .buttons {
     display: flex;
+    justify-content: right;
     position: absolute;
     bottom: 0;
     right: 0;
+    width: 100%;
 }
 .buttons > button {
     margin: 0;
@@ -141,6 +166,16 @@ form > h1{
 }
 .cancelButton {
     color: var(--notifyError);
+}
+.changePasswordB {
+    color: red;
+    padding: 10px 15px;
+    position: absolute;
+    left: 0;
+    right: auto;
+}
+.changePasswordB:hover {
+    box-shadow: none;
 }
 
 </style>

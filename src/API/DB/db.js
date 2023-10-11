@@ -518,3 +518,14 @@ export async function updateUserProfile(userMail, newProfile) {
   return true
 
 }
+
+export async function checkPassword(userMail, password) {
+  const user = await getUserProfile(userMail)
+
+  if (user.profile.password == password) {
+    return true
+    
+  }
+
+  return false
+}
