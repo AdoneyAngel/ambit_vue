@@ -45,6 +45,9 @@ export default {
     position: absolute;
     z-index: 3;
 }
+.content {
+    z-index: 4;
+}
 header {
     position: absolute;
     top: 0;
