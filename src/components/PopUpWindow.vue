@@ -1,10 +1,6 @@
 <template>
     <section class="popUpWindow">
-        <header>
-            <button class="closeB">
-                <img :src="crossIcon" alt="">
-            </button>
-        </header>
+    <div class="closeClick" @click="close"></div>
 
         <section class="content">
             <slot>
@@ -24,6 +20,12 @@ export default {
     data() {
         return {
             crossIcon
+        }
+    },
+    methods: {
+        close() {
+            this.$emit("closeFunc")
+            console.log(0)
         }
     }
 }
@@ -66,6 +68,11 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.closeClick{
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 </style>

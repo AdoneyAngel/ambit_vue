@@ -1,5 +1,5 @@
 <template>
-    <PopUpWindow v-if="changingPassword == true">
+    <PopUpWindow @closeFunc="closePopUp" v-if="changingPassword == true">
         <ChangePasswordPopUp @closeFunc="closePopUp"/>
     </PopUpWindow>
     <form @submit.prevent="handleSubmit">
