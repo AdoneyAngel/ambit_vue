@@ -2,16 +2,31 @@
     <main class="profilePage">
         <section class="profilePageContainer">
 
-            <router-view></router-view>
+            <router-view :userMail="userMail"></router-view>
 
         </section>
     </main>
 </template>
 
 <script>
+import { getData } from '@/API/localStorage';
+import { ref } from 'vue';
+
 
 
 export default {
+    data() {
+        return {
+            userMail: ref("")
+        }
+    },
+    created() {
+        const userMail = getData("userMail")
+
+        this.userMail = userMail
+
+        console.log(userMail)
+    }
 }
 
 </script>

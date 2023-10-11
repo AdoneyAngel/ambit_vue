@@ -502,3 +502,19 @@ export async function getUserData(userMail) {
   return false
 
 }
+
+export async function updateUserProfile(userMail, newProfile) {
+
+  const user = await getUserProfile(userMail)
+
+  let newUser = Object.assign({}, user)
+
+  newUser.profile.mail = newProfile.mail ? newProfile.mail : user.profile.mail
+  newUser.profile.name = newProfile.name ? newProfile.name : user.profile.name
+  newUser.profile.password = newProfile.password ? newProfile.password : user.profile.password
+  
+  await updateUser(userMail, newUser)
+
+  return true
+
+}

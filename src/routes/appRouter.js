@@ -12,6 +12,7 @@ import SearchGuide from "@/pages/guides/search/SearchGuide.vue"
 import FoundGuideList from "@/components/FoundGuidesList.vue"
 import ProfilePage from "@/pages/profile/visualizer/LayoutPage.vue"
 import ProfileVisualizer from "@/pages/profile/visualizer/ProfileVisualizer.vue"
+import ProfileEditor from "@/pages/profile/visualizer/ProfileEditor.vue"
 
 const appRoutes = [
     {
@@ -80,9 +81,15 @@ const appRoutes = [
         component: ProfilePage,
         children: [
             {
-                path: "visualizer/:userMail",
+                path: "visualizer/:profileMail",
                 name: "profilevisualizer",
                 component: ProfileVisualizer,
+                props: true
+            },
+            {
+                path: "editor/:profileMail",
+                name: "profileeditor",
+                component: ProfileEditor,
                 props: true
             }
 

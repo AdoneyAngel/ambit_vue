@@ -7,6 +7,10 @@
 
                     <img class="photo" :src="abstractProfileIco" alt="">
 
+                    <button @click="goEditorPage" v-if="userMail == profileMail" class="editProfileButton">
+                        <img :src="editIcon" alt="">
+                    </button>
+                    
                 </div>
 
                 <h1>{{userProfile.name}}</h1>
@@ -43,15 +47,19 @@
 
 <script>
 
-import { getUserData } from "@/API/DB/db";
-import abstractProfileIco from "@/assets/images/abstract.png"
 import router from "@/routes/appRouter";
 import { ref } from "vue";
+
+import { getUserData } from "@/API/DB/db";
+
+import abstractProfileIco from "@/assets/images/abstract.png"
+import editIcon from "@/assets/images/edit.png"
 
 export default {
     data() {
         return {
             abstractProfileIco,
+            editIcon,
             userProfile: ref({}),
             nGuides: ref(0),
             nJoined: ref(0)
@@ -59,12 +67,13 @@ export default {
 
     },
     props: {
+        profileMail: String,
         userMail: String
 
     },
     created() {
 
-        getUserData(this.userMail).then(profile => {
+        getUserData(this.profileMail).then(profile => {
 
             if (profile){
                 this.userProfile = profile
@@ -76,6 +85,11 @@ export default {
             }
 
         })
+    },
+    methods: {
+        goEditorPage() {
+            router.push(`/profile/editor/${this.userMail}`)
+        }
     }
 }
 
@@ -148,7 +162,7 @@ export default {
 .photo{
     position: absolute;
 }
-.photo:hover{
+.photoContainer:hover > .photo{
     width: 100%;
     height: 100%;
 
@@ -203,6 +217,41 @@ export default {
     color: var(--purple);
     margin-right: 5px;
     transform: translateX(-50%);
+}
+.editProfileButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    z-index: 2;
+    background: linear-gradient(45deg, white, #00000000);
+    padding: 5px;
+    /* border-bottom: 1px solid black;
+    box-shadow: 0px 2px 0px white; */
+    border-bottom: 3px solid rgb(255, 255, 255);
+    border-left: 3px solid rgb(255, 255, 255);
+    cursor: pointer;
+    opacity: .5;
+}
+.editProfileButton:hover {
+    transition: .1s linear;
+    border-bottom: 0px solid rgb(255, 255, 255);
+    border-left: 0px solid rgb(255, 255, 255);
+    background: linear-gradient(45deg, white, #0000004b);
+    width: 28px;
+    height: 28px;
+    top: 42px;
+    right: 22px;
+}
+.editProfileButton:active {
+    filter: brightness(.5);
+}
+.editProfileButton > img{
+    width: 15px;
 }
 
 </style>
