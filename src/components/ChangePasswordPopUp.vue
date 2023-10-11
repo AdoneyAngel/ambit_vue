@@ -55,7 +55,7 @@ export default {
                 
             this.changeStatus = 2
 
-            if (correctPassword) {
+            if (correctPassword && this.newPassword.length) {
                 const newProfile = {
                     password: this.newPassword
                 }
@@ -99,6 +99,7 @@ h1 {
     font-weight: bold;
     text-align: center;
     margin-bottom: 100px;
+    color: white;
 }
 section {
     margin: 20px 0;
