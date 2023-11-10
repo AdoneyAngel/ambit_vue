@@ -36,10 +36,13 @@
         </section>
 
         <div class="editorFooter">
+            <userListGuideShare :userShared="currentGuide.share" />
+
             <button class="btnAdd" @click="addNewStep()">New step</button>
             <button @click="saveGuide" class="btnAdd">
                 <img :src="uploadButtonIcon">
             </button>
+
         </div>
     </main>
 
@@ -70,6 +73,7 @@ import "@/styles/guideStepTitleListVisualizer.css"
 
 import GuideSettingsDisplay from '@/components/GuideSettingsDisplay.vue';
 import GuideStepTitleList from '@/components/GuideStepTitleList.vue';
+import userListGuideShare from "../components/userListGuideShare.vue"
 
 export default {
     data(){
@@ -86,7 +90,8 @@ export default {
     },
     components: {
         GuideSettingsDisplay,
-        GuideStepTitleList
+        GuideStepTitleList,
+        userListGuideShare
     },
     props: {
         guideCode: String
@@ -320,6 +325,7 @@ section{
     position: absolute;
     bottom: 50px;
     width: 97%;
+    height: 45px;
     display: flex;
     flex-direction: row;
     justify-content: right;
