@@ -7,6 +7,8 @@
   
 </template>
 
+<!-- Prueba de sincronización GIT -->
+
 <script>
 import { userIsLogged } from './API/localStorage';
 import VisualNotification from './components/VisualNotification.vue';
