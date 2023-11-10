@@ -127,6 +127,7 @@ export async function createGuide(userMail){
       code,
       name: "New Guide",
       privated:  true,
+      share: [],
       allowedUsers: [],
       date: {
         day: date.getDate(),

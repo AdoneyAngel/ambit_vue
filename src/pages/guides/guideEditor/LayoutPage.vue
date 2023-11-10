@@ -101,6 +101,7 @@ export default {
             name: initialGuide.name,
             initialName: initialGuide.name,
             date: initialGuide.date,
+            share: initialGuide.share,
             privated: initialGuide.privated,
             allowedUsers: initialGuide.allowedUsers,
             steps: initialGuide.steps.map(step => {
@@ -180,6 +181,7 @@ export default {
             code: this.currentGuide.code,
             name: this.currentGuide.name,
             date: this.currentGuide.date,
+            share: this.currentGuide.share,
             privated: this.currentGuide.privated,
             allowedUsers: this.currentGuide.allowedUsers,
             steps: this.currentGuide.steps.map(step => {
