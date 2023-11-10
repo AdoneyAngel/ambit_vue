@@ -301,11 +301,7 @@ export async function checkUserExist(userMail, nickname){
     userMail = userMail.toLowerCase()
     nickname = nickname.toLowerCase()
 
-    console.log(1)
-
     const users = await getUsers()
-
-    console.log(2)
 
     const userMailExist = users.find(user => user.profile.mail.toLowerCase() === userMail) ? true : false
     const nicknameExist = users.find(user => user.profile.name.toLowerCase() === nickname) ? true : false

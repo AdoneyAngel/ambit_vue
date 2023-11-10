@@ -14,8 +14,6 @@ import { userIsLogged } from './API/localStorage';
 import VisualNotification from './components/VisualNotification.vue';
 import router from './routes/appRouter';
 import principalHeader from "@/components/pagePrincipalHeader.vue"
-// import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
-// import db from './API/DB/db';
 
 export default {
   name: 'App',
@@ -23,36 +21,16 @@ export default {
     VisualNotification,
     principalHeader
 },
-async created() {
-
-  //EJECUTAR SCRIPT PARA INSERTAR UNA NUEVA PROPIEDAD....INCOMPLETO
-
-  // const users = await getDocs(collection(db, "users"))
-
-  // users.forEach(userDoc => {
-  //   const userGuides = userDoc.data().guides
-  //   const userID = userDoc.id
-
-  //   userGuides.forEach(guide => {
-  //     guide.share = ""
-
-  //   })
-
-    
-  //   setDoc(doc(db, "users", userID), {
-  //       guides: userGuides
-  //   })
-
-  // }) 
-
+created() {
 
   this.$watch(
-    async () => this.$route.fullPath,
-    async () => {
-      const isLogged = await userIsLogged()
-      const location = this.$route.fullPath
+    () => this.$route.params,
+    () => {
 
-      if(!isLogged && location != "/login/signin" && location != "/login/signup"){
+      const isLogged = userIsLogged()
+      const location = window.location.hash
+
+      if(!isLogged && location != "#/login/signin" && location != "#/login/signup"){
           router.push("/login/signup")
       }
 

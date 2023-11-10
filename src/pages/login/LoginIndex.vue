@@ -1,7 +1,7 @@
 <template>
     <main>
         <img id="logo" :src="logo" alt="">
-        <section >
+        <section>
             <header>
                 <p>{{ currentForm }}</p>
 
@@ -30,7 +30,7 @@ import router from '@/routes/appRouter'
 export default {
     data(){
         return {
-            currentForm: this.$route.name == "signup" != -1 ? "Sign Up" : "Sign In",
+            currentForm: window.location.hash.indexOf("signup") != -1 ? "Sign Up" : "Sign In",
             logo,
             isLoading: false,
             isLogged: false
@@ -43,9 +43,8 @@ export default {
             appRouter.push("/login/signup")
         }
     },
-    async created(){
-        const isLogged = await userIsLogged()
-        if (isLogged){
+    created(){
+        if (userIsLogged()){
             this.isLogged = true
         }
 
