@@ -47,15 +47,14 @@ async created() {
 
 
   this.$watch(
-    async () => this.$route.params,
+    async () => this.$route.fullPath,
     async () => {
       const isLogged = await userIsLogged()
-      const location = window.fullPath
+      const location = this.$route.fullPath
 
-      console.log(!isLogged && location != "#/login/signin" && location != "#/login/signup")
       console.log(this.$route.fullPath)
 
-      if(!isLogged && location != "#/login/signin" && location != "#/login/signup"){
+      if(!isLogged && location != "/login/signin" && location != "/login/signup"){
           router.push("/login/signup")
       }
 

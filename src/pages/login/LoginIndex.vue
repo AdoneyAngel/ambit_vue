@@ -30,7 +30,7 @@ import router from '@/routes/appRouter'
 export default {
     data(){
         return {
-            currentForm: window.location.hash.indexOf("signup") != -1 ? "Sign Up" : "Sign In",
+            currentForm: this.$route.name == "signup" != -1 ? "Sign Up" : "Sign In",
             logo,
             isLoading: false,
             isLogged: false
@@ -43,8 +43,9 @@ export default {
             appRouter.push("/login/signup")
         }
     },
-    created(){
-        if (userIsLogged()){
+    async created(){
+        const isLogged = await userIsLogged()
+        if (isLogged){
             this.isLogged = true
         }
 
