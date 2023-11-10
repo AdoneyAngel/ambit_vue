@@ -1,11 +1,19 @@
+import { checkUserExist } from "./DB/db"
 
 const storage = window.localStorage
 export default storage
 
-export function userIsLogged(){
-    const mail = storage.getItem("userMail") ? true : false
+export async function userIsLogged(){
+    const mail = storage.getItem("userMail")
+    const nickname = storage.getItem("userNickname")
+    let userExist = undefined
 
-    return mail
+    if(mail) {
+        userExist = await checkUserExist(mail, nickname);
+
+    }
+
+    return userExist
 }
 
 export function setData(name, value){
