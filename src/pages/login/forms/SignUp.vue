@@ -29,13 +29,15 @@ import { ref } from 'vue'
 import "@/styles/loginForm.css"
 import {createUser} from '../../../API/DB/db'
 import PasswordLayout from '@/components/PasswordLayout.vue'
+import { setUser } from '@/API/localStorage'
 
 export default {
     props: {
         currentForm: String,
         setCurrentForm: Function,
         setLoading: Function,
-        unsetLoading: Function
+        unsetLoading: Function,
+        setIsLogged: Function,
     },
     components: {
         PasswordLayout
@@ -53,8 +55,13 @@ export default {
 
             this.setLoading()
 
-            createUser(this.mail, this.nickname, this.password).then(() => {
+            createUser(this.mail, this.nickname, this.password).then(result => {
                 this.unsetLoading()
+
+                if (result) {
+                    setUser(result.mail, result.name)
+                    this.setIsLogged()
+                }
             })
         },
 

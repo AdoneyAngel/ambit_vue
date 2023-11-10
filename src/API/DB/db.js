@@ -61,8 +61,15 @@ export async function createUser(userMail, nickname, password){
 
   await addDoc(collection(db, "users"), newUser)
 
+  return {
+    mail: newUser.profile.mail,
+    name: newUser.profile.name
+  }
+
   }catch(ex){
     console.error("Something has happened while the user was being created: ", ex.message)
+
+    return false
 
   }
 }
