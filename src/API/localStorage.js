@@ -8,9 +8,11 @@ export async function userIsLogged(){
     const nickname = storage.getItem("userNickname")
     let userExist = undefined
 
-    if(mail) {
+    if(mail != undefined) {
         userExist = await checkUserExist(mail, nickname);
 
+    } else {
+        userExist = false;
     }
 
     return userExist
