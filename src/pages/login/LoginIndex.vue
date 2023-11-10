@@ -1,7 +1,7 @@
 <template>
     <main>
         <img id="logo" :src="logo" alt="">
-        <section>
+        <section >
             <header>
                 <p>{{ currentForm }}</p>
 
