@@ -4,7 +4,7 @@
         <section class="contentContainer">
             <h1>{{ title }}</h1>
 
-            <section class="inputContainer">
+            <section class="inputContainer" v-on:keyup="(e  ) => handleKeyUp(e)">
                 <input :placeholder="placeholder" type="text" v-model="inputData" required>
                 <button @click="handleSubmit">{{ buttonText }}</button>
             </section>            
@@ -34,6 +34,11 @@ export default {
             await this.callBack(this.inputData)
 
             this.close()
+        },
+        handleKeyUp(event) {
+            if (event.keyCode == "13") {
+                this.handleSubmit()
+            }
         }
     },
 }
