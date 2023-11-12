@@ -20,7 +20,8 @@
                 </div>
 
                 <div class="guideFooter">
-                    <p class="guideUserOwnerName">GUIDE OWNER</p>
+                    <p v-if="!guide.isShared" class="guideUserOwnerName">You</p>
+                    <p v-if="guide.isShared" class="guideUserOwnerName guideUserSharedName">Shared by {{ guide.sharedBy }}</p>
 
                     <p class="guideDate">
                         <span class="pointSeparator">
@@ -41,7 +42,7 @@
 
             <div v-if="contextMenuGuideItem === guide" class="guideContextMenu">
                 <button v-if="isOwner" @click="openEditor(guide.code)" class="btnContextMenu">Edit</button>
-                <button @click="() => deleteGuide(guide.code)" class="btnContextMenu" v-if="isOwner">Delete</button>
+                <button @click="() => deleteGuide(guide.code)" class="btnContextMenu" v-if="isOwner && !guide.isShared">Delete</button>
                 <button @click="() => joinedGetOut(guide.code)" class="btnContextMenu" v-if="!isOwner">Get out</button>
                 <button class="btnContextMenu">Info</button>
             </div>    
@@ -53,14 +54,15 @@
 <script>
 import router from '@/routes/appRouter';
 import { ref } from 'vue';
-import { deleteGuide, deleteJoinedGuide } from "@/API/DB/db"
+import { deleteGuide, deleteJoinedGuide, getGuideData } from "@/API/DB/db"
 import { getData } from '@/API/localStorage';
 import { setNotification } from "@/assets/notifications"
 
 export default {
     data(){
         return {
-            contextMenuGuideItem: ref({})
+            contextMenuGuideItem: ref({}),
+            getGuideData
         }
     },
     props: {

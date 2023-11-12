@@ -537,3 +537,19 @@ export async function checkPassword(userMail, password) {
 
   return false
 }
+
+export async function getSharedGuides(userMail) {
+  const users = await getUsers()
+
+  let allGuides = []
+
+  users.forEach(user => {
+    user.guides.forEach(guide => {
+      allGuides.push(guide)
+    })
+  })
+
+  const sharedGuides = allGuides.filter(guide => guide.share && guide.share.includes(userMail))
+
+  return sharedGuides
+}
