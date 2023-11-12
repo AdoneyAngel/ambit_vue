@@ -283,9 +283,9 @@ export default {
     display: flex;
     flex-direction: column;
     width: 80%;
-    height: 85vh;
+    height: 83vh;
     top: 50%;
-    right: 30px;
+    right: 50px;
     background: var(--visualizerContainerBackground);
     transform: translateY(-50%);
     position: absolute;
