@@ -83,6 +83,7 @@ created() {
   margin: 0;
   outline: none;
   transition: .3s var(--animationTransition);
+  animation-timing-function: var(--animationTransition);
 }
 *::-webkit-scrollbar{
     background: transparent;

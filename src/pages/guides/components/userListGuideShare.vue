@@ -7,6 +7,7 @@
         </header>
 
         <ul class="userListGuideShare">
+            <h1 class="emptySharedUsersText" v-if="usersShared && !usersShared.length && opened">Nobody shared</h1>
             <li v-for="user in usersShared" :key="user">
                 <p>{{ user }}</p>
                 <button @click="removeSharedUser(user)">-</button>
@@ -79,7 +80,7 @@ export default {
     display: flex;
     flex-direction: column;
     opacity: 1;
-    animation: .5s openList ease-in-out;
+    animation: .5s openList;
 }
 .userListGuideShareContainerOpened > header > p{
     opacity: 0;
@@ -133,6 +134,13 @@ export default {
 }
 .userListGuideShare > li > button:hover {
     box-shadow: none;
+}
+.emptySharedUsersText {
+    font-size: 20px;
+    color: rgb(165, 165, 165);
+    font-weight: 200;
+    text-align: center;
+    height: 25px;
 }
 
 @keyframes openList {
