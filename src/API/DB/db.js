@@ -202,8 +202,9 @@ export async function getGuideData(code){
 
   let owner
   let privated
-  let allowedUsers 
+  let allowedUsers = []
   let nickname
+  let usersShared = []
 
   users.forEach(user => {
     user.guides.forEach(guide => {
@@ -212,7 +213,8 @@ export async function getGuideData(code){
         owner = user.profile.mail
         privated = guide.privated
         allowedUsers = guide.allowedUsers
-        nickname = user.profile.name
+        nickname = user.profile.name,
+        usersShared = guide.share
 
       }
 
