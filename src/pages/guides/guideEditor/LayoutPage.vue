@@ -263,7 +263,10 @@ export default {
             this.openGuideSettings = !this.openGuideSettings
         },
         addSharedUser(userToShare) {
-            this.currentGuide.share.push(userToShare)
+            if (userToShare.toLowerCase() !== this.userMail.toLowerCase()) {
+                this.currentGuide.share.push(userToShare)
+
+            }
         },
         removeSharedUser(userToRemove) {
             let newShared = []
