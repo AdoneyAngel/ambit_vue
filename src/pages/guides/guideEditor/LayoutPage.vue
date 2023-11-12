@@ -36,7 +36,7 @@
         </section>
 
         <div class="editorFooter">
-            <userListGuideShare :userShared="currentGuide.share" />
+            <userListGuideShare :usersShared="currentGuide.share" :removeSharedUser="removeSharedUser" :addSharedUser="addSharedUser" :openGeneralPopUp="openGeneralPopUp" :userShared="currentGuide.share" />
 
             <button class="btnAdd" @click="addNewStep()">New step</button>
             <button @click="saveGuide" class="btnAdd">
@@ -94,7 +94,8 @@ export default {
         userListGuideShare
     },
     props: {
-        guideCode: String
+        guideCode: String,
+        openGeneralPopUp: Function
     },
     async created(){
         const initialGuide = await getGuide(this.guideCode)
@@ -236,6 +237,19 @@ export default {
         },
         guideSettingsToggle(){
             this.openGuideSettings = !this.openGuideSettings
+        },
+        addSharedUser(userToShare) {
+            this.currentGuide.share.push(userToShare)
+        },
+        removeSharedUser(userToRemove) {
+            let newShared = []
+            this.currentGuide.share.forEach(user => {
+                if (user !== userToRemove) {
+                    newShared.push(user)
+                }
+            })
+
+            this.currentGuide.share = newShared
         }
     }
 }

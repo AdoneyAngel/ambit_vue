@@ -1,7 +1,8 @@
 <template>
   <principal-header />
   <main id="app">
-    <router-view></router-view>
+    <router-view :openGeneralPopUp="openGeneralPopUp"></router-view>
+    <general-pop-up-single-input v-if="generalPopUp" :call-back="generalPopUpData.callBack" :close="closeGeneralPopUp" :title="generalPopUpData.title" :button-text="generalPopUpData.buttonText" :placeholder="generalPopUpData.placeholder"/>
     <visual-notification></visual-notification>
   </main>
   
@@ -14,12 +15,21 @@ import { userIsLogged } from './API/localStorage';
 import VisualNotification from './components/VisualNotification.vue';
 import router from './routes/appRouter';
 import principalHeader from "@/components/pagePrincipalHeader.vue"
+import GeneralPopUpSingleInput from './components/generalPopUpSingleInput.vue';
+import { ref } from 'vue';
 
 export default {
   name: 'App',
   components: {
     VisualNotification,
-    principalHeader
+    principalHeader,
+    GeneralPopUpSingleInput
+},
+data() {
+  return {
+    generalPopUp: ref(false),
+    generalPopUpData: ref({})
+  }
 },
 created() {
 
@@ -40,6 +50,16 @@ created() {
 
     }
     )
+  },
+  methods: {
+    openGeneralPopUp(data) {
+      this.generalPopUp = true
+      this.generalPopUpData = data
+    },
+    closeGeneralPopUp() {
+      this.generalPopUp = false
+      this.generalPopUpData = {}
+    }
   }
 
 }
@@ -62,7 +82,7 @@ created() {
   font-weight: 400;
   margin: 0;
   outline: none;
-  transition: .3s;
+  transition: .3s var(--animationTransition);
 }
 *::-webkit-scrollbar{
     background: transparent;

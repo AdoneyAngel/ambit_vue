@@ -1,34 +1,52 @@
 <template>
     <div :class="'userListGuideShareContainer' + (opened ? ' userListGuideShareContainerOpened' : ' userListGuideShareContainerClosed')">
         <header @click="switchOpenList">
-            <img :src="groupManageIcon" alt="">
-            <p>0</p>
+            <img :src="groupManageIcon">
+            <p v-if="!opened">{{ usersShared ? usersShared.length : 0 }}</p>
+            <img @click="addUser" v-if="opened" :src="plusIcon" class="addB">
         </header>
 
         <ul class="userListGuideShare">
-            <li><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae, perspiciatis!</p></li>
-            <li><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae, perspiciatis!</p></li>
-            <li><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae, perspiciatis!</p></li>
-            <li><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae, perspiciatis!</p></li>
-            <li><p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae, perspiciatis!</p></li>
+            <li v-for="user in usersShared" :key="user">
+                <p>{{ user }}</p>
+                <button @click="removeSharedUser(user)">-</button>
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
 import groupManageIcon from "@/assets/images/groupManage.png"
+import plusIcon from "@/assets/images/plus.png"
+
 import { ref } from "vue";
 
 export default {
     data() {
         return {
             groupManageIcon,
+            plusIcon,
             opened: ref(false)
         }
+    },
+    props: {
+        openGeneralPopUp: Function,
+        addSharedUser: Function,
+        removeSharedUser: Function,
+        usersShared: Array
     },
     methods: {
         switchOpenList() {
             this.opened = !this.opened
+        },
+        addUser() {
+
+            this.openGeneralPopUp({
+                title: "Share guide",
+                placeholder: "Email",
+                buttonText: "Add",
+                callBack: this.addSharedUser
+            })
         }
     }
 }
@@ -41,18 +59,17 @@ export default {
     margin-right: auto;
     margin-left: 40px;
     background: white;
-    border-radius: 25px;
     max-height: 400px;
     position: absolute;
     bottom: 0;
     left: 0;
     animation: 1s openUserShared ease-in-out;
-    box-shadow: 0px 0px 10px var(--purple);
 }
 .userListGuideShareContainerClosed {
     height: 45px;
     width: 100px;
-
+    border-radius: 25px;
+    box-shadow: 0px 0px 10px var(--purple);
 }
 .userListGuideShareContainerClosed > .userListGuideShare {
     display: none;
@@ -70,6 +87,9 @@ export default {
 .userListGuideShareContainerOpened {
     height: auto;
     width: 300px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px grey;
+    padding: 5px 0;
 }
 .userListGuideShareContainer > header{
     display: flex;
@@ -80,6 +100,9 @@ export default {
 }
 .userListGuideShareContainer > header > img{
     height: 60%;
+}
+.userListGuideShareContainer > header > .addB {
+    margin-left: auto;
 }
 .userListGuideShareContainer > header > p{
     margin-left: auto;
@@ -93,13 +116,23 @@ export default {
     width: 95%;
     border-radius: 5px;
     padding: 2px 5px;
-    margin: 2px 0;
+    margin: 5px 0;
+    cursor: default;
+    display: flex;
 }
 .userListGuideShare > li > p{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     width: 100%;
+}
+.userListGuideShare > li > button {
+    margin: 0;
+    margin-left: auto;
+    padding: 3px 10px;   
+}
+.userListGuideShare > li > button:hover {
+    box-shadow: none;
 }
 
 @keyframes openList {
