@@ -113,6 +113,9 @@ export default {
                 } else {
                     router.push("/")
                 }
+
+            } else {
+                this.isShared = false
             }
         })
 
