@@ -30,13 +30,18 @@ export default {
                 })
 
                 sharedGuides.forEach(async guide => {
+
                     getGuideData(guide.code).then(data => {
+
                         sharedGuides = sharedGuides.map(guideB => {
+
                             if(guideB.code === guide.code) {
                                 return {
                                     ...guideB,
                                     sharedBy: data.owner
                                 }
+                            } else {
+                                return guideB
                             }
                         })
 
