@@ -36,7 +36,7 @@
         </section>
 
         <div class="editorFooter">
-            <userListGuideShare :usersShared="currentGuide.share" :removeSharedUser="removeSharedUser" :addSharedUser="addSharedUser" :openGeneralPopUp="openGeneralPopUp" :userShared="currentGuide.share" />
+            <userListGuideShare v-if="!isShared" :usersShared="currentGuide.share" :removeSharedUser="removeSharedUser" :addSharedUser="addSharedUser" :openGeneralPopUp="openGeneralPopUp" :userShared="currentGuide.share" />
 
             <button class="btnAdd" @click="addNewStep()">New step</button>
             <button @click="saveGuide" class="btnAdd">
@@ -46,7 +46,7 @@
         </div>
     </main>
 
-    <div class="guideSettingsButtonContainer">
+    <div v-if="!isShared" class="guideSettingsButtonContainer">
         <button @click="guideSettingsToggle">
             <img :class="openGuideSettings ? 'opened' : 'closed'" :src="settingsIcon">
         </button>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { getGuide, updateGuide } from '@/API/DB/db';
+import { getGuide, getGuideData, updateGuide } from '@/API/DB/db';
 import { getData } from '@/API/localStorage';
 import { ref } from 'vue';
 
@@ -74,6 +74,7 @@ import "@/styles/guideStepTitleListVisualizer.css"
 import GuideSettingsDisplay from '@/components/GuideSettingsDisplay.vue';
 import GuideStepTitleList from '@/components/GuideStepTitleList.vue';
 import userListGuideShare from "../components/userListGuideShare.vue"
+import router from '@/routes/appRouter';
 
 export default {
     data(){
@@ -85,7 +86,9 @@ export default {
             settingsIcon,
             openGuideSettings: ref(false),
             uploadButtonIcon,
-            stepTitles: ref([])
+            stepTitles: ref([]),
+            isShared: ref(true),
+            userMail: ref("")
         }
     },
     components: {
@@ -98,7 +101,25 @@ export default {
         openGeneralPopUp: Function
     },
     async created(){
+        this.userMail = getData("userMail")
+
+        //VERIFY IF USER CAN MODIFY THIS GUIDE OR ITS SHARED WITH HIM
+
+        getGuideData(this.guideCode).then(guideData => {
+            if (this.userMail !== guideData.owner) {
+                if (guideData.usersShared.includes(this.userMail)) {
+                    this.isShared = true
+
+                } else {
+                    router.push("/")
+                }
+            }
+        })
+
+        //---------------------------------------------
+
         const initialGuide = await getGuide(this.guideCode)
+
 
         this.initialGuide = initialGuide
 

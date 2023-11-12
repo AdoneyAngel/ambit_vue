@@ -225,7 +225,8 @@ export async function getGuideData(code){
     owner,
     privated,
     allowedUsers,
-    nickname
+    nickname,
+    usersShared
   }
 
 }
@@ -241,11 +242,12 @@ export async function userIsAllowed(userMail, guideCode){
 export async function updateGuide(userMail, guideCode, newGuide){
   const isAllowed = await userIsAllowed(userMail, guideCode)
 
-  if(!isAllowed){
-    return false
-  }
-
   const guideData = await getGuideData(guideCode)
+
+  if(!isAllowed && !guideData.usersShared.includes(userMail)){
+    return "disallowed"
+    
+  }
 
   const owner = guideData.owner
   const ownerProfile = await getUserProfile(owner)
@@ -261,7 +263,7 @@ export async function updateGuide(userMail, guideCode, newGuide){
 
   })
 
-  updateUser(owner, newOwnerProfile)
+  await updateUser(owner, newOwnerProfile)
 }
 
 //------------------------------------------------------------------------------FUNTIONS
