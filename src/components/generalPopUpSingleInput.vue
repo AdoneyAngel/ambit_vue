@@ -55,6 +55,7 @@ export default {
     display: flex;
     justify-content: center;
     padding-top: 250px;
+    animation: .4s openBackground;
 }
 .contentContainer {
     display: flex;
@@ -65,6 +66,8 @@ export default {
     width: 40%;
     height: min-content;
     position: relative;
+    transform-origin: center;
+    animation: .5s openPopUpContent;
 }
 h1 {
     text-align: center;
@@ -98,6 +101,24 @@ button {
     height: 100dvh;
     position: absolute;
     top: 0;
+}
+@keyframes openPopUpContent {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes openBackground {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 </style>
