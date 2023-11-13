@@ -288,7 +288,7 @@ export default {
 .guideEditorContainer{
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: calc(80% - 50px);
     height: 83vh;
     top: 50%;
     right: 50px;
