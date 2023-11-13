@@ -16,7 +16,7 @@
 
         <section class="buttons">
             <button @click="handleChangePass" class="changePasswordB">Change account password</button>
-            <button class="cancelButton">Cancel</button>
+            <button @click="cancel" class="cancelButton">Cancel</button>
             <button @click="handleChange" v-if="changeStatus == 0">Change</button>
             <button @click="handleConfirm" v-if="changeStatus == 1">Confirm</button>
             <button v-if="changeStatus == 2">DONE!</button>
@@ -33,6 +33,7 @@ import PopUpWindow from "@/components/PopUpWindow.vue"
 import ChangePasswordPopUp from "@/components/ChangePasswordPopUp.vue"
 
 import { ref } from 'vue';
+import router from '@/routes/appRouter';
 
 
 export default {
@@ -84,6 +85,9 @@ export default {
         closePopUp() {
             this.changingPassword = false
             console.log(0)
+        },
+        cancel() {
+            router.go(-1)
         }
     }
 }
