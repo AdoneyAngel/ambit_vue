@@ -75,6 +75,7 @@ created() {
   --animationTransition: cubic-bezier(0.075, 0.82, 0.165, 1);
   --principalBorderRadius: 30px;
   --visualizerContainerBackground: rgb(237 237 237 / 90%);
+  --generalHoverBrightness: .97;
 }
 
 *{

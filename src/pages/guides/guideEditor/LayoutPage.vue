@@ -466,6 +466,9 @@ img.opened{
     right: 20px;
     width: 200px;
 }
+button:hover {
+    filter: brightness(var(--generalHoverBrightness));
+}
 
 @keyframes rotateClosedSettingIcon{
     0%{

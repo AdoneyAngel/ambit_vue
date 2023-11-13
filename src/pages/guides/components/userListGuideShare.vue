@@ -76,6 +76,9 @@ export default {
     display: none;
     opacity: 0;
 }
+.userListGuideShareContainerClosed:hover {
+    filter: brightness(var(--generalHoverBrightness));
+}
 .userListGuideShareContainerOpened > .userListGuideShare {
     display: flex;
     flex-direction: column;
