@@ -151,6 +151,7 @@ main{
     z-index: 2;
     padding: 7px 0;
     border-radius: 100px;
+    transition-timing-function: cubic-bezier(0.32, 0.21, 0.13, 1.32);
 }
 .guideNav > .selectedNavButton{
     color: white;
