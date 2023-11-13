@@ -16,7 +16,7 @@
 
         <section class="buttons">
             <button @click="handleChangePass" class="changePasswordB">Change account password</button>
-            <button @click="cancel" class="cancelButton">Cancel</button>
+            <button @click="cancel" class="cancelButton">Back</button>
             <button @click="handleChange" v-if="changeStatus == 0">Change</button>
             <button @click="handleConfirm" v-if="changeStatus == 1">Confirm</button>
             <button v-if="changeStatus == 2">DONE!</button>
