@@ -100,17 +100,21 @@ export default {
 
             for (let user of users) {
 
-            let duplicated = false
+                let duplicated = false
 
-            for(let user2 of filteredUsers) {
-                if(user.mail === user2.mail) {
+                for(let user2 of filteredUsers) {
+                    if(user.mail === user2.mail) {
+                        duplicated = true
+                    }
+                }
+
+                if (user.mail === this.userMail) {
                     duplicated = true
                 }
-            }
 
-            if(!duplicated) {
-                filteredUsers.push(user)
-            }
+                if(!duplicated) {
+                    filteredUsers.push(user)
+                }
 
             }
 
