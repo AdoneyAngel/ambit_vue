@@ -228,30 +228,35 @@ export default {
     top: 40px;
     right: 20px;
     z-index: 2;
-    background: linear-gradient(45deg, white, #00000000);
+    background: rgb(255, 255, 255);
     padding: 5px;
-    /* border-bottom: 1px solid black;
-    box-shadow: 0px 2px 0px white; */
-    border-bottom: 3px solid rgb(255, 255, 255);
-    border-left: 3px solid rgb(255, 255, 255);
     cursor: pointer;
     opacity: .5;
 }
 .editProfileButton:hover {
-    transition: .1s linear;
-    border-bottom: 0px solid rgb(255, 255, 255);
-    border-left: 0px solid rgb(255, 255, 255);
-    background: linear-gradient(45deg, white, #0000004b);
-    width: 28px;
-    height: 28px;
-    top: 42px;
-    right: 22px;
+    transition: .1s;
+    filter: brightness(.9);
+}
+.editProfileButton:hover > img {
+    animation: .7s editProfileButtonImgClick cubic-bezier(1, 0.17, 0, 0.73);
 }
 .editProfileButton:active {
-    filter: brightness(.5);
+    filter: brightness(.8);
 }
 .editProfileButton > img{
     width: 15px;
+    transform-origin: bottom left;
+}
+@keyframes editProfileButtonImgClick {
+    0%{
+        transform: rotate(5deg);
+    }
+    50% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
 </style>
