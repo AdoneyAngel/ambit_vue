@@ -504,7 +504,8 @@ export async function getUserData(userMail) {
       mail: userFound.profile.mail,
       name: userFound.profile.name,
       guides: userFound.guides,
-      guidesJoined: userFound.joinedGuides
+      guidesJoined: userFound.joinedGuides,
+      following: userFound.following
     }
 
     return userFound ? userData : false
