@@ -558,3 +558,19 @@ export async function getSharedGuides(userMail) {
 
   return sharedGuides
 }
+
+export async function setFollowingUser(userMail, userToFollow) {
+  const userProfile = await getUserProfile(userMail)
+  let newProfile = {...userProfile}
+
+  if (newProfile.following.includes(userToFollow)) {
+    return false
+  }
+  
+  newProfile.following.push(userToFollow)
+
+  await updateUser(userMail, newProfile)
+
+  return true
+
+} 
