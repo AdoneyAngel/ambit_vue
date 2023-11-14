@@ -18,7 +18,9 @@
 
             <div class="userStats">
 
-                <div class="userMail">
+                <div class="userMail" v-if="!loadingData">
+                    <button @click="follow" class="followButton" v-if="!isFollowing">Follow</button>
+                    <button class="followButton" v-if="isFollowing">UnFollow</button>
                     <p><span>></span>{{ userProfile.mail }}</p>
                 </div>
 
@@ -50,7 +52,7 @@
 import router from "@/routes/appRouter";
 import { ref } from "vue";
 
-import { getUserData } from "@/API/DB/db";
+import { getUserData, setFollowingUser } from "@/API/DB/db";
 
 import abstractProfileIco from "@/assets/images/abstract.png"
 import editIcon from "@/assets/images/edit.png"
@@ -62,7 +64,9 @@ export default {
             editIcon,
             userProfile: ref({}),
             nGuides: ref(0),
-            nJoined: ref(0)
+            nJoined: ref(0),
+            isFollowing: ref(false),
+            loadingData: ref(true)
         }
 
     },
@@ -71,14 +75,22 @@ export default {
         userMail: String
 
     },
-    created() {
+    async created() {
 
-        getUserData(this.profileMail).then(profile => {
+        getUserData(this.profileMail).then(async profile => {
 
             if (profile){
                 this.userProfile = profile
                 this.nGuides = profile.guides.length
                 this.nJoined = profile.guidesJoined.length
+
+                const userData = await getUserData(this.userMail)
+
+                if (userData.following.includes(profile.mail)) {
+                    this.isFollowing = true
+                }
+
+                this.loadingData = false
 
             }else {
                 router.push("/")
@@ -89,6 +101,13 @@ export default {
     methods: {
         goEditorPage() {
             router.push(`/profile/editor/${this.userMail}`)
+        },
+        async follow() {   
+            setFollowingUser(this.userMail, this.userProfile.mail).then(res => {
+                if(res) {
+                    this.isFollowing = true
+                }
+            })
         }
     }
 }
@@ -246,6 +265,11 @@ export default {
 .editProfileButton > img{
     width: 15px;
     transform-origin: bottom left;
+}
+.followButton {
+    margin: 0px;
+    position: absolute;
+    bottom: 70px;
 }
 @keyframes editProfileButtonImgClick {
     0%{

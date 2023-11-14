@@ -13,6 +13,7 @@ import FoundGuideList from "@/components/FoundGuidesList.vue"
 import ProfilePage from "@/pages/profile/visualizer/LayoutPage.vue"
 import ProfileVisualizer from "@/pages/profile/visualizer/ProfileVisualizer.vue"
 import ProfileEditor from "@/pages/profile/visualizer/ProfileEditor.vue"
+import FollowingPage from "@/pages/following/LayoutPage.vue"
 
 const appRoutes = [
     {
@@ -94,6 +95,11 @@ const appRoutes = [
             }
 
         ]
+    },
+    {
+        path: "/following",
+        name: "following",
+        component: FollowingPage
     }
 ]
 
