@@ -31,7 +31,13 @@ data() {
     generalPopUpData: ref({})
   }
 },
-created() {
+async created() {
+
+  //Modificar propiedades DB
+
+
+
+  //_-------------------------------
 
   this.$watch(
     () => this.$route.params,
