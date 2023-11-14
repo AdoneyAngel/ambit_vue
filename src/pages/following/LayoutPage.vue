@@ -3,7 +3,7 @@
         
         <header class="followingContainer">
             <h1>Following</h1>
-            <input type="text" placeholder="Follow new uses">
+            <input type="text" placeholder="Follow new users">
         </header>
 
         <FollowingList :users="following"/>

@@ -19,7 +19,8 @@
 
         <button 
             @mouseleave="handleMouseLeave" 
-            @mouseenter="e => handleMouseHover(e)">Following</button>
+            @mouseenter="e => handleMouseHover(e)"
+            @click="route.push('/following')">Following</button>
 
     </div>
 </template>
