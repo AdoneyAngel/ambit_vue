@@ -20,8 +20,28 @@ export default {
         users: Array
     },
     created() {
-        console.log(this.users)
+        this.usersData = this.users
     }
 }
 
 </script>
+
+<style scoped>
+
+ul {
+    width: 80%;
+    height: 60%;
+    min-width: 400px;
+    list-style: none;
+    padding: 0;
+}
+li {
+    display: flex;
+    flex-direction: row;
+    background: white;
+    margin: 20px 0;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+</style>
